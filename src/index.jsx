@@ -3,13 +3,14 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import Authentication from 'component/authentication';
-import Layout from 'routes/layout';
-import Overview from 'routes/overview';
-import User from 'routes/user';
-import Content from 'routes/content';
-import Category from 'routes/category';
-import Question from 'routes/question';
+import Authentication from "component/authentication";
+import Layout from "routes/layout";
+import Overview from "routes/overview";
+import User from "routes/user";
+import Content from "routes/content";
+import Category from "routes/category";
+import Question from "routes/question";
+import NotFound from "routes/notFound";
 
 const root = (
   <React.StrictMode>
@@ -49,6 +50,7 @@ const root = (
               </Authentication>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
       <Toaster position="top-right" />
