@@ -2,7 +2,18 @@ const Content = () => {
 
     return (
 
-      <h1>Content</h1>
+      <>
+      <div className="content-header">
+        <h2>Blog</h2>
+        <ul>
+          <li>
+            <a href="#">OverView</a>
+          </li>
+          <li>/</li>
+          <li>blog</li>
+        </ul>
+      </div>
+    </>
     );
 
 }

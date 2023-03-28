@@ -61,8 +61,8 @@ body {
   }
 
   .continer {
-    margin-left: 200px;
-    margin-top: 50px;
+    margin-left: 205px;
+    margin-top: 65px;
 
     .navbar {
       position: fixed;
@@ -141,7 +141,7 @@ body {
 
           input[type="text"] {
             width: calc(100% - 45px);
-            padding: 0 35px 0 10px;
+            padding: 0 10px 0 35px;
 
             &:focus {
               outline: none !important;
@@ -151,7 +151,7 @@ body {
           i {
             position: absolute;
             top: 18px;
-            right: 10px;
+            left: 10px;
             color: gray;
           }
         }
@@ -321,7 +321,7 @@ body {
                       line-height: 20px;
                       color: $clrGray400;
 
-                      span{
+                      span {
                         margin: 0;
                         display: flex;
                         align-items: center;
@@ -330,15 +330,52 @@ body {
                         font-size: 11px;
                         color: $clrGray800;
 
-                        i{
-                            margin-left: 0;
-                            margin-right: 5px;
+                        i {
+                          margin-left: 0;
+                          margin-right: 5px;
                         }
                       }
                     }
                   }
                 }
               }
+            }
+          }
+        }
+      }
+    }
+
+    .page-content {
+      background-color: $clrWhite;
+      margin-right: 5px;
+      padding: 0 10px;
+      box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+        rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+      border-radius: 3px;
+
+      .content-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 30px;
+        border-bottom: 3px solid $clrGray1200;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+
+        h2 {
+          color: $clrRed100;
+        }
+
+        ul {
+          display: flex;
+
+          li {
+            color: $clrBrandRed;
+            font-size: 14px;
+            padding: 0 3px;
+
+            a {
+              color: $clrBrandRed;
             }
           }
         }

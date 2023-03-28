@@ -1,0 +1,85 @@
+@import "./main/colors";
+
+.users {
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0px;
+
+    .item {
+      width: calc(25% - 30px);
+      margin: 5px;
+      padding: 20px 10px;
+      background-color: white;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      text-align: center;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+      img {
+        width: 120px;
+        border-radius: 50%;
+        border: 3px solid #e9e9e9;
+        padding: 5px;
+      }
+
+      h2 {
+        margin: 10px 0;
+        color: #8e0b0e;
+        font-size: 20px;
+      }
+
+      p {
+        text-align: left;
+        color: #9a9a9a;
+        line-height: 20px;
+        font-size: 14px;
+
+        i {
+          color: black;
+          min-width: 25px;
+          margin-right: 5px;
+          text-align: center;
+        }
+      }
+
+      hr {
+        margin: 10px auto;
+      }
+
+      .tools {
+        button {
+          border-radius: 50%;
+          height: 40px;
+          width: 40px;
+          text-align: center;
+          border: 2px solid #e9e9e9;
+          margin: 5px;
+          font-size: 18px;
+          background-color: white;
+          color: $clrGray400;
+          cursor: pointer;
+          transition: all 0.5s;
+
+          &:hover {
+            border-color: $clrBlue100;
+            color: $clrdarkBlue;
+          }
+        }
+      }
+
+      .info {
+        position: absolute;
+        left: -80px;
+        transition: 0.4s all;
+      }
+
+      &:hover {
+        .info {
+          left: 10px;
+        }
+      }
+    }
+  }
+}
