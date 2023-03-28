@@ -2,7 +2,7 @@
 
 body {
   margin: 0;
-  background-color: $clrGray1200;
+  background-color: $clrGray1300;
 
   a {
     text-decoration: none;
@@ -16,6 +16,48 @@ body {
   h5,
   p {
     margin: 0;
+  }
+
+  ul {
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  hr {
+    width: 70%;
+    margin: 0 auto;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0),
+      rgb(195 195 195 / 75%),
+      rgba(0, 0, 0, 0)
+    );
+  }
+
+  .formController {
+    position: relative;
+
+    input[type="text"] {
+      line-height: 30px;
+      width: calc(100% - 20px);
+      border-radius: 3px;
+      border: 1px solid #8f9294;
+      padding: 0 10px;
+      letter-spacing: 1px;
+      color: #3b3c3d;
+      font-size: 15px;
+      transition: 0.3s all;
+    }
+
+    &:focus {
+      outline: none !important;
+      border: 1px solid $clrBlue;
+    }
   }
 
   .continer {
@@ -32,38 +74,274 @@ body {
       box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
         rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 
+      h1 {
+        line-height: 50px;
+        color: $clrRed100;
+      }
+
       .main-navbar {
         display: flex;
         flex-direction: column;
         padding: 0 10px;
 
         a {
-          line-height: 30px;
+          line-height: 45px;
           font-size: 18px;
-          transition: 0.3s all;
+          transition: 0.5s all;
+
+          i {
+            padding: 7px 1px;
+            color: $clrGray500;
+            min-width: 30px;
+            text-align: center;
+            transition: 0.3s all;
+          }
+
+          span {
+            margin-left: 10px;
+            transition: 0.3s all;
+          }
 
           &:hover {
-            margin-left: 10px;
+            background-color: $clrBlue200;
+            span {
+              margin-left: 20px;
+            }
+
+            i {
+              color: $clrdarkBlue;
+            }
           }
         }
       }
     }
 
     .header {
+      display: flex;
+      justify-content: space-between;
       position: fixed;
       top: 5px;
       left: 205px;
       right: 5px;
       height: 50px;
+      padding: 0 10px;
       line-height: 50px;
       background-color: $clrWhite;
       border-radius: 3px;
       box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
         rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 
-      h1 {
+      .left {
         height: 50px;
         line-height: 50px;
+        width: 50%;
+
+        .formController {
+          width: 60%;
+
+          input[type="text"] {
+            width: calc(100% - 45px);
+            padding: 0 35px 0 10px;
+
+            &:focus {
+              outline: none !important;
+              border: 1px solid $clrBlue;
+            }
+          }
+          i {
+            position: absolute;
+            top: 18px;
+            right: 10px;
+            color: gray;
+          }
+        }
+      }
+
+      .right {
+        height: 50px;
+        line-height: 50px;
+        width: 50%;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+
+        .drpBox {
+          position: relative;
+
+          button {
+            position: relative;
+            border: none;
+            background-color: white;
+            margin: 0 5px;
+            width: 45px;
+            line-height: 50px;
+            text-align: center;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s all;
+
+            img {
+              width: 100%;
+            }
+
+            i {
+              font-size: 20px;
+            }
+
+            &:after {
+              content: "";
+              display: block;
+              margin: auto;
+              height: 3px;
+              width: 0px;
+              position: absolute;
+              bottom: 0;
+              background: transparent;
+              transition: width 0.5s ease, background-color 0.5s ease;
+            }
+
+            &:hover {
+              background-color: $clrBlue200;
+
+              &:after {
+                width: 100%;
+                background: $clrAqua;
+              }
+            }
+          }
+
+          .drpContent {
+            position: absolute;
+            background-color: $clrWhite;
+            min-width: 200px;
+            display: none;
+            right: 0;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+              rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+
+            &.show {
+              display: block;
+            }
+
+            ul {
+              margin: 0;
+
+              li {
+                padding: 0 10px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                transition: 0.3s all;
+                position: relative;
+
+                span {
+                  margin-left: 15px;
+                }
+
+                img {
+                  width: 25px;
+                }
+
+                &:hover {
+                  background-color: $clrBlue200;
+                }
+
+                &::after {
+                  content: "";
+                  display: block;
+                  margin: 0 auto;
+                  height: 1px;
+                  width: 80%;
+                  position: absolute;
+                  bottom: 0;
+                  right: 10%;
+                  background: #d7d6d6;
+                  transition: width 0.5s ease, background-color 0.5s ease;
+                }
+
+                &:last-child {
+                  &::after {
+                    content: none;
+                  }
+                }
+
+                &.drpHeader {
+                  display: flex;
+                  flex-direction: column;
+                  margin: 10px 0;
+
+                  img {
+                    width: 60px !important;
+                    border-radius: 50%;
+                    border: 3px solid $clrGray1200;
+                    padding: 5px;
+                  }
+
+                  span {
+                    margin: 0;
+                    text-align: center;
+                    font-size: 14px;
+                    word-wrap: normal;
+                    color: $clrGray400;
+                  }
+
+                  &:hover {
+                    background-color: white;
+                  }
+                }
+              }
+
+              &.notification {
+                width: 300px;
+
+                li {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+
+                  img {
+                    width: 45px;
+                  }
+
+                  div {
+                    width: calc(100% - 45px);
+                    padding: 0 10px;
+
+                    h3 {
+                      line-height: 25px;
+                    }
+
+                    p {
+                      font-size: 14px;
+                      line-height: 20px;
+                      color: $clrGray400;
+
+                      span{
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        align-content: center;
+                        flex-direction: row;
+                        font-size: 11px;
+                        color: $clrGray800;
+
+                        i{
+                            margin-left: 0;
+                            margin-right: 5px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
