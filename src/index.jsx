@@ -13,6 +13,7 @@ import Question from "routes/question";
 import NotFound from "routes/notFound";
 
 import 'react-tooltip/dist/react-tooltip.css'
+import './asset/styles/main/font-awsome.css'
 
 const root = (
   <React.StrictMode>

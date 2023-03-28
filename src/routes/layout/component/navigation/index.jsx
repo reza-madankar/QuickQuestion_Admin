@@ -5,7 +5,8 @@ const Navigation = () => {
   return (
     <nav className="main-navbar">
       <h1>Quick Question</h1>
-      <NavLink end to="/" className="bbt-overview" id="overViewLink">
+      <NavLink end to="/" id="overViewLink">
+        <i className="fa fa-home"></i>
         <span>Overview</span>
       </NavLink>
       <NavLink
