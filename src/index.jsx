@@ -12,6 +12,8 @@ import Category from "routes/category";
 import Question from "routes/question";
 import NotFound from "routes/notFound";
 
+import 'react-tooltip/dist/react-tooltip.css'
+
 const root = (
   <React.StrictMode>
     <BrowserRouter>

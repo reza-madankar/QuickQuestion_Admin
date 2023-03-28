@@ -1,50 +1,25 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import Tooltip from 'rc-tooltip';
+import React, { useState, useEffect, Fragment } from "react";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
-function UseTooltip({ overlayClassName,
-    placement,
-    trigger,
-    overlay = null,
-    children = null,
-    mouseEnterDelay,
-    mouseLeaveDelay }) {
+function UseTooltip({ anchorId, placement, variant, content }) {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-    const [isLargeScreen, setIsLargeScreen] = useState(false);
+  useEffect(() => {
+    const { innerWidth: width } = window;
 
-    useEffect(() => {
+    if (width > 820) {
+      setIsLargeScreen(true);
+    }
+  }, []);
 
-        const { innerWidth: width } = window;
-
-        if (width > 820) {
-
-            setIsLargeScreen(true);
-
-        }
-
-    }, []);
-
-    return (
-        <>
-            {isLargeScreen === true ? (
-                <Tooltip
-                    overlayClassName={overlayClassName}
-                    mouseEnterDelay={mouseEnterDelay}
-                    mouseLeaveDelay={mouseLeaveDelay}
-                    placement={placement}
-                    trigger={trigger}
-                    overlay={overlay}
-                >
-                    {children}
-                </Tooltip>
-            )
-                : (
-                    <>
-                        {children}
-                    </>
-                )}
-        </>
-    );
-
+  return (
+    <ReactTooltip
+      anchorId={anchorId}
+      place={placement}
+      variant={variant}
+      content={content}
+    />
+  );
 }
 
 export default UseTooltip;

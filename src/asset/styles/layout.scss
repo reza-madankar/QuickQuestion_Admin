@@ -1,0 +1,70 @@
+@import "./main/colors";
+
+body {
+  margin: 0;
+  background-color: $clrGray1200;
+
+  a {
+    text-decoration: none;
+    color: $clrdarkBlue;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
+    margin: 0;
+  }
+
+  .continer {
+    margin-left: 200px;
+    margin-top: 50px;
+
+    .navbar {
+      position: fixed;
+      left: 5px;
+      top: 5px;
+      bottom: 5px;
+      width: 195px;
+      background-color: $clrWhite;
+      box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+        rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+      .main-navbar {
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+
+        a {
+          line-height: 30px;
+          font-size: 18px;
+          transition: 0.3s all;
+
+          &:hover {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+
+    .header {
+      position: fixed;
+      top: 5px;
+      left: 205px;
+      right: 5px;
+      height: 50px;
+      line-height: 50px;
+      background-color: $clrWhite;
+      border-radius: 3px;
+      box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+        rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+      h1 {
+        height: 50px;
+        line-height: 50px;
+      }
+    }
+  }
+}

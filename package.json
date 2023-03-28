@@ -10,12 +10,12 @@
     "env-cmd": "^10.1.0",
     "eslint": "^8.36.0",
     "eslint-config-airbnb": "^19.0.4",
-    "rc-tooltip": "^6.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "react-tooltip": "^5.10.1",
     "sass": "^1.60.0",
     "web-vitals": "^2.1.4"
   },
