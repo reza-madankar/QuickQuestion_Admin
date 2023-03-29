@@ -353,7 +353,8 @@ body {
       box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
         rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
       border-radius: 3px;
-
+      margin-bottom: 50px;
+      padding-bottom: 10px;
       .content-header {
         display: flex;
         align-items: center;
@@ -377,6 +378,40 @@ body {
 
             a {
               color: $clrBrandRed;
+            }
+          }
+        }
+      }
+
+      .content-footer {
+        position: fixed;
+        bottom: 0px;
+        background-color: white;
+        left: 205px;
+        right: 5px;
+        box-shadow: rgba(50, 50, 105, 0.15) -2px -4px 5px 0px,
+          rgba(0, 0, 0, 0.05) -4px -2px 1px 0px;
+        border-radius: 3px;
+
+        .pagination {
+          float: right;
+          min-height: 35px;
+
+          a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+
+            &.active {
+              background-color: #337ab7;
+              color: white;
+              border-radius: 5px;
+            }
+
+            &:hover:not(.active) {
+              background-color: #ddd;
+              border-radius: 5px;
             }
           }
         }
