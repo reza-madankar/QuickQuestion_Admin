@@ -1,9 +1,20 @@
+import React, { useState } from "react";
+
 import "../../asset/styles/question.scss";
 
 import Boy from "asset/images/boy.png";
 import Girl from "asset/images/girl.png";
 
 const Question = () => {
+  const [drpMenu, setDrpMenu] = useState("");
+
+  const changeSetDrpMenu = (drp) => {
+    if (drpMenu === drp) {
+      setDrpMenu("");
+    } else {
+      setDrpMenu(drp);
+    }
+  };
   return (
     <div className="question">
       <div className="content-header">
@@ -15,6 +26,40 @@ const Question = () => {
           <li>/</li>
           <li>Question</li>
         </ul>
+      </div>
+      <div className="content-tools">
+        <div className="formController">
+          <input type="text" placeholder="search" />
+          <i className="fa fa-search"></i>
+        </div>
+        <div className="right-tools">
+          <div className="drpBox">
+            <button type="button" onClick={() => changeSetDrpMenu("category")}>
+              Category 1
+              <i className="fa fa-chevron-down" />
+            </button>
+            <div
+              className={`drpContent ${
+                drpMenu === "category" ? "show" : "hide"
+              }`}
+            >
+              <ul>
+                <li>
+                  <span> Category 1</span>
+                </li>
+                <li>
+                  <span> Category 2</span>
+                </li>
+                <li>
+                  <span>Category 3</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <button type="button" className="create">
+            New
+          </button>
+        </div>
       </div>
       <div className="items">
         <div className="item">

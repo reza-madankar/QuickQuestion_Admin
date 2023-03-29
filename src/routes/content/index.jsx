@@ -1,12 +1,22 @@
+import React, { useState } from "react";
+
 import "../../asset/styles/category.scss";
 
 import Boy from "asset/images/boy.png";
 
 const Content = () => {
+  const [drpMenu, setDrpMenu] = useState("");
 
-    return (
+  const changeSetDrpMenu = (drp) => {
+    if (drpMenu === drp) {
+      setDrpMenu("");
+    } else {
+      setDrpMenu(drp);
+    }
+  };
 
-      <div className="category">
+  return (
+    <div className="category">
       <div className="content-header">
         <h2>Blog</h2>
         <ul>
@@ -16,6 +26,40 @@ const Content = () => {
           <li>/</li>
           <li>blog</li>
         </ul>
+      </div>
+      <div className="content-tools">
+        <div className="formController">
+          <input type="text" placeholder="search" />
+          <i className="fa fa-search"></i>
+        </div>
+        <div className="right-tools">
+          <div className="drpBox">
+            <button type="button" onClick={() => changeSetDrpMenu("category")}>
+              Category 1
+              <i className="fa fa-chevron-down" />
+            </button>
+            <div
+              className={`drpContent ${
+                drpMenu === "category" ? "show" : "hide"
+              }`}
+            >
+              <ul>
+                <li>
+                  <span> Category 1</span>
+                </li>
+                <li>
+                  <span> Category 2</span>
+                </li>
+                <li>
+                  <span>Category 3</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <button type="button" className="create">
+            New
+          </button>
+        </div>
       </div>
       <div className="items">
         <div className="item">
@@ -134,9 +178,22 @@ const Content = () => {
           </div>
         </div>
       </div>
+      <div className="content-footer">
+        <div class="pagination">
+          <a href="#">&laquo;</a>
+          <a href="#">1</a>
+          <a href="#" class="active">
+            2
+          </a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#">6</a>
+          <a href="#">&raquo;</a>
+        </div>
+      </div>
     </div>
-    );
-
-}
+  );
+};
 
 export default Content;
