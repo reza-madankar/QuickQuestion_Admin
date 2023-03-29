@@ -1,0 +1,74 @@
+@import "./main/colors";
+
+.category {
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+
+    .item {
+      padding-left: 110px;
+      height: 100px;
+      width: calc(50% - 130px);
+      padding-top: 10px;
+      position: relative;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      margin: 15px 10px;
+      border-radius: 5px;
+      overflow: hidden;
+
+      h2 {
+        margin: 10px 0;
+        color: $clrGray100;
+      }
+
+      p {
+        color: $clrGray500;
+      }
+
+      .logo {
+        position: absolute;
+        left: 0;
+        top: 0px;
+        width: 100px;
+        height: 100px;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .tools {
+        position: absolute;
+        display: flex;
+        top: 10px;
+        right: -500px;
+        transition: 0.4s all;
+
+        button {
+          background-color: white;
+          margin: 5px 0px;
+          border: 1px solid white;
+          font-size: 16px;
+          color: gray;
+          cursor: pointer;
+          transition: 0.45s all;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            color: $clrBlue;
+            border: 1px solid $clrAqua;
+          }
+        }
+      }
+
+      &:hover {
+        .tools {
+          right: 10px;
+        }
+      }
+    }
+  }
+}

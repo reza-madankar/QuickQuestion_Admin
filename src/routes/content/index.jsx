@@ -1,8 +1,12 @@
+import "../../asset/styles/category.scss";
+
+import Boy from "asset/images/boy.png";
+
 const Content = () => {
 
     return (
 
-      <>
+      <div className="category">
       <div className="content-header">
         <h2>Blog</h2>
         <ul>
@@ -13,7 +17,124 @@ const Content = () => {
           <li>blog</li>
         </ul>
       </div>
-    </>
+      <div className="items">
+        <div className="item">
+          <div
+            className="logo"
+            style={{ backgroundImage: "url(" + Boy + ")" }}
+          ></div>
+          <h2>Content Title</h2>
+          <p>Category Description Here</p>
+
+          <div className="tools">
+            <button type="button">
+              <i className="fa fa-images"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-tags"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div className="item">
+          <div
+            className="logo"
+            style={{ backgroundImage: "url(" + Boy + ")" }}
+          ></div>
+          <h2>Content Title</h2>
+          <p>Category Description Here</p>
+
+          <div className="tools">
+            <button type="button">
+              <i className="fa fa-images"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-tags"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div className="item">
+          <div
+            className="logo"
+            style={{ backgroundImage: "url(" + Boy + ")" }}
+          ></div>
+          <h2>Content Title</h2>
+          <p>Category Description Here</p>
+
+          <div className="tools">
+            <button type="button">
+              <i className="fa fa-images"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-tags"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div className="item">
+          <div
+            className="logo"
+            style={{ backgroundImage: "url(" + Boy + ")" }}
+          ></div>
+          <h2>Content Title</h2>
+          <p>Category Description Here</p>
+
+          <div className="tools">
+            <button type="button">
+              <i className="fa fa-images"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-tags"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div className="item">
+          <div
+            className="logo"
+            style={{ backgroundImage: "url(" + Boy + ")" }}
+          ></div>
+          <h2>Content Title</h2>
+          <p>Category Description Here</p>
+
+          <div className="tools">
+            <button type="button">
+              <i className="fa fa-images"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-tags"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button type="button">
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     );
 
 }
