@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
 
 import Boy from "asset/images/boy.png";
 import Iran from "asset/images/iran.png";
@@ -8,6 +9,7 @@ import Spain from "asset/images/spain.png";
 
 const Header = () => {
   const [drpMenu, setDrpMenu] = useState("");
+  const drpRef = useRef(null);
 
   const changeSetDrpMenu = (drp) => {
     if (drpMenu === drp) {
@@ -17,6 +19,10 @@ const Header = () => {
     }
   };
 
+  useOutsideDetector(drpRef, drpMenu, () => {
+    setDrpMenu("");
+  });
+
   return (
     <>
       <div className="left">
@@ -25,7 +31,7 @@ const Header = () => {
           <i className="fa fa-search"></i>
         </div>
       </div>
-      <div className="right">
+      <div className="right" ref={drpRef}>
         <div className="drpBox">
           <button type="button" onClick={() => changeSetDrpMenu("user")}>
             <i className="fa fa-user"></i>
