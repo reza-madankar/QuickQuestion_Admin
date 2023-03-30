@@ -1,21 +1,16 @@
 const NotFound = () => {
-
-    return (
-
-      <>
-      <div className="content-header">
-        <h2>Not Found</h2>
-        <ul>
-          <li>
-            <a href="#">OverView</a>
-          </li>
-          <li>/</li>
-          <li>notfound</li>
-        </ul>
+  return (
+    <div className="notfount">
+    
+      <div className="notfound-content">
+        <h2>
+          <span>404</span>
+          <i>|</i>
+          <span>Page Not Found.</span>
+        </h2>
       </div>
-    </>
-    );
-
-}
+    </div>
+  );
+};
 
 export default NotFound;

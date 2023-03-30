@@ -548,6 +548,23 @@ body {
           }
         }
       }
+
+      .notfound-content {
+        height: calc(100vh - 125px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h2 {
+          color: gray;
+          font-weight: normal;
+
+          i {
+            font-size: 39px;
+            margin: 0 20px;
+          }
+        }
+      }
     }
   }
 }
