@@ -42,7 +42,8 @@ body {
   .formController {
     position: relative;
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="password"]  {
       line-height: 30px;
       width: calc(100% - 20px);
       border-radius: 3px;
@@ -140,7 +141,7 @@ body {
         .formController {
           width: 60%;
 
-          input[type="text"] {
+          input[type="text"]{
             width: calc(100% - 45px);
             padding: 0 10px 0 35px;
 
