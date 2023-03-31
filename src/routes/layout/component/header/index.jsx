@@ -51,7 +51,7 @@ const Header = () => {
                 <span>Password</span>
               </li>
               <li>
-                <i class="fa fa-arrow-right-from-bracket"></i>
+                <i className="fa fa-arrow-right-from-bracket"></i>
                 <span>Sign Out</span>
               </li>
             </ul>

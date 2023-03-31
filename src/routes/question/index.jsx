@@ -282,10 +282,10 @@ const Question = () => {
         </div>
       </div>
       <div className="content-footer">
-        <div class="pagination">
+        <div className="pagination">
           <a href="#">&laquo;</a>
           <a href="#">1</a>
-          <a href="#" class="active">
+          <a href="#" className="active">
             2
           </a>
           <a href="#">3</a>

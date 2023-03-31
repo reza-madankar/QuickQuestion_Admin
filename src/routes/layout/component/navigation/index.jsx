@@ -27,7 +27,7 @@ const Navigation = () => {
         <span>Blog</span>
       </NavLink>
       <NavLink to="/question/0" className="bbt-scanner">
-        <i class="fa fa-comment"></i>
+        <i className="fa fa-comment"></i>
         <span>Question</span>
       </NavLink>
     </nav>
