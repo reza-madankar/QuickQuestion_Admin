@@ -1,0 +1,39 @@
+@import "./main/colors";
+
+.modal-container {
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  display: none;
+  &-show {
+    display: flex;
+    background-color: rgba($clrBlack, 0.2);
+  }
+}
+
+.modal-body {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background-color: $clrWhite;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.1875rem 0.5rem rgb($clrBlack, 0.2);
+}
+
+@media only screen and (max-width: 800px) {
+  .modal-body {
+    padding: 1rem;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .modal-body {
+    width: 90%;
+  }
+}
