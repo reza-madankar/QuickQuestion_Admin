@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import axios from "utilities/axios";
 import { useUserState } from "utilities/user";
@@ -7,11 +7,17 @@ import { useNavigate } from "react-router-dom";
 import "asset/styles/login.scss";
 
 const Login = () => {
-  const { setUser } = useUserState();
+  const { setUser, isUserAuthenticated } = useUserState();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  useEffect(() => {
+    if (isUserAuthenticated() === true) {
+      navigate("/");
+    }
+  }, []);
 
   const loginHandller = () => {
     if (email.length <= 0 || password.length <= 0) {
@@ -26,8 +32,6 @@ const Login = () => {
         })
         .then((response) => {
           const { user } = response.data;
-          const dd = user.roles.some((x) => x === "Admin");
-
           if (
             user.roles.length > 0 &&
             user.roles.some((x) => x === "Admin") === true

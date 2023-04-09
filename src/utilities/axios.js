@@ -1,9 +1,8 @@
 import axios from "axios";
-import { useUserState } from "utilities/user";
-import config from "./config";
+//import config from "./config";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5280",
+  baseURL: "https://localhost:7280",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

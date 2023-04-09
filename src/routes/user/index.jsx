@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import axios from "utilities/axios";
 
 import "../../asset/styles/user.scss";
 
@@ -7,19 +8,28 @@ import Boy from "asset/images/boy.png";
 import Girl from "asset/images/girl.png";
 
 const User = () => {
-  const [drpMenu, setDrpMenu] = useState("");
+  const [drprole, setDrpRole] = useState([]);
+  const [drpMenu, setDrpMenu] = useState("hide");
+  const [role, setRole] = useState("All Roles");
   const drpRef = useRef(null);
 
+  useEffect(() => {
+    axios.get("/api/Auth/roles").then((response) => {
+      setDrpRole(response.data.sort((a, b) => a.title.localeCompare(b.title)));
+    });
+  }, []);
+
   const changeSetDrpMenu = (drp) => {
-    if (drpMenu === drp) {
-      setDrpMenu("");
+    if (drp === null) {
+      setDrpMenu("show");
     } else {
-      setDrpMenu(drp);
+      setDrpMenu("hide");
+      setRole(drp);
     }
   };
 
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("");
+  useOutsideDetector(drpRef, role, () => {
+    setDrpMenu("hide");
   });
 
   return (
@@ -41,25 +51,22 @@ const User = () => {
         </div>
         <div className="right-tools">
           <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu("category")}>
-              Category 1
+          <button type="button" onClick={() => changeSetDrpMenu(null)}>
+              {role}
               <i className="fa fa-chevron-down" />
             </button>
             <div
-              className={`drpContent ${
-                drpMenu === "category" ? "show" : "hide"
-              }`}
+              className={`drpContent ${drpMenu}`}
             >
               <ul>
-                <li>
-                  <span> Category 1</span>
+                <li  onClick={() => changeSetDrpMenu("All Roles")}>
+                  <span>All Roles</span>
                 </li>
-                <li>
-                  <span> Category 2</span>
-                </li>
-                <li>
-                  <span>Category 3</span>
-                </li>
+                {drprole.map((item, key) => (
+                  <li key={key}  onClick={() => changeSetDrpMenu(item.title)}>
+                    <span>{item.title}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
