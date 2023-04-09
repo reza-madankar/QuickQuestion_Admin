@@ -1,5 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import Select from "react-select";
+import axios from "utilities/axios";
 
 import "../../asset/styles/category.scss";
 
@@ -8,17 +10,19 @@ import Girl from "asset/images/girl.png";
 const Category = () => {
   const [drpMenu, setDrpMenu] = useState("");
   const drpRef = useRef(null);
+  const [drpCategory, setDrpCategory] = useState([]);
+  const [category, setCategory] = useState(13);
 
-  const changeSetDrpMenu = (drp) => {
-    if (drpMenu === drp) {
-      setDrpMenu("");
-    } else {
-      setDrpMenu(drp);
-    }
-  };
+  useEffect(() => {
+    axios.get(`/api/Content/category/${category}`).then((response) => {
+      setDrpCategory(
+        response.data.sort((a, b) => a.title.localeCompare(b.title))
+      );
+    });
+  }, []);
 
   useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("");
+    setDrpMenu("hide");
   });
 
   return (
@@ -39,29 +43,18 @@ const Category = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu("category")}>
-              Category 1
-              <i className="fa fa-chevron-down" />
-            </button>
-            <div
-              className={`drpContent ${
-                drpMenu === "category" ? "show" : "hide"
-              }`}
-            >
-              <ul>
-                <li>
-                  <span> Category 1</span>
-                </li>
-                <li>
-                  <span> Category 2</span>
-                </li>
-                <li>
-                  <span>Category 3</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <Select
+          className="drpCategory"
+            placeholder="Select Category"
+            options={drpCategory.map(({ id, title }) => ({
+              value: id,
+              label: title,
+            }))}
+            onInputChange={setCategory}
+            filterOption={(item) => item}
+            inputValue={category}
+            isMulti={false}
+          />
           <button type="button" className="create">
             New
           </button>

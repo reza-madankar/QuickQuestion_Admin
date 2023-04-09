@@ -1,6 +1,12 @@
 @import "./main/colors";
 
 .category {
+
+  .drpCategory {
+    width: 300px;
+    margin-right: 10px;
+  }
+
   .items {
     display: flex;
     flex-wrap: wrap;

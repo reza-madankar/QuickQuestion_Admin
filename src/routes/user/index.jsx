@@ -14,9 +14,16 @@ const User = () => {
   const drpRef = useRef(null);
 
   useEffect(() => {
-    axios.get("/api/Auth/roles").then((response) => {
-      setDrpRole(response.data.sort((a, b) => a.title.localeCompare(b.title)));
-    });
+    axios
+      .get("/api/Auth/roles")
+      .then((response) => {
+        setDrpRole(
+          response.data.sort((a, b) => a.title.localeCompare(b.title))
+        );
+      })
+      .catch((ex) => {
+        console.log(ex);
+      });
   }, []);
 
   const changeSetDrpMenu = (drp) => {
@@ -28,7 +35,7 @@ const User = () => {
     }
   };
 
-  useOutsideDetector(drpRef, role, () => {
+  useOutsideDetector(drpRef, drpMenu, () => {
     setDrpMenu("hide");
   });
 
@@ -51,19 +58,17 @@ const User = () => {
         </div>
         <div className="right-tools">
           <div className="drpBox" ref={drpRef}>
-          <button type="button" onClick={() => changeSetDrpMenu(null)}>
+            <button type="button" onClick={() => changeSetDrpMenu(null)}>
               {role}
               <i className="fa fa-chevron-down" />
             </button>
-            <div
-              className={`drpContent ${drpMenu}`}
-            >
+            <div className={`drpContent ${drpMenu}`}>
               <ul>
-                <li  onClick={() => changeSetDrpMenu("All Roles")}>
+                <li onClick={() => changeSetDrpMenu("All Roles")}>
                   <span>All Roles</span>
                 </li>
                 {drprole.map((item, key) => (
-                  <li key={key}  onClick={() => changeSetDrpMenu(item.title)}>
+                  <li key={key} onClick={() => changeSetDrpMenu(item.title)}>
                     <span>{item.title}</span>
                   </li>
                 ))}
