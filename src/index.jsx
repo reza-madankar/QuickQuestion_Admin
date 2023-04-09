@@ -21,7 +21,14 @@ const root = (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Overview />} />
+          <Route
+            index
+            element={
+              <Authentication>
+                <Overview />
+              </Authentication>
+            }
+          />
           <Route
             path="/user"
             element={
