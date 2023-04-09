@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import { useUserState } from "utilities/user";
+import { useNavigate } from 'react-router-dom';
 
 import Boy from "asset/images/boy.png";
 import Iran from "asset/images/iran.png";
@@ -10,6 +12,8 @@ import Spain from "asset/images/spain.png";
 const Header = () => {
   const [drpMenu, setDrpMenu] = useState("");
   const drpRef = useRef(null);
+  const { resetUser } = useUserState();
+  const navigate = useNavigate();
 
   const changeSetDrpMenu = (drp) => {
     if (drpMenu === drp) {
@@ -22,6 +26,11 @@ const Header = () => {
   useOutsideDetector(drpRef, drpMenu, () => {
     setDrpMenu("");
   });
+
+  const logOut = () => {
+    resetUser();
+    navigate("/login");
+  };
 
   return (
     <>
@@ -50,7 +59,7 @@ const Header = () => {
                 <i className="fa fa-key"></i>
                 <span>Password</span>
               </li>
-              <li>
+              <li onClick={logOut}>
                 <i className="fa fa-arrow-right-from-bracket"></i>
                 <span>Sign Out</span>
               </li>

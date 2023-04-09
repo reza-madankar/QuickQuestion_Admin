@@ -12,7 +12,7 @@ export default function Authentication({ children }) {
       {!userLoggedIn && (
         <Navigate to="/login" state={{ from: location }} replace />
       )}
-      {userLoggedIn && { children }}
+      { children }
     </>
   );
 }
