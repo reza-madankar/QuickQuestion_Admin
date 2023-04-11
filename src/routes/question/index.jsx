@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import React from "react";
 
 import "../../asset/styles/question.scss";
 
@@ -7,20 +6,6 @@ import Boy from "asset/images/boy.png";
 import Girl from "asset/images/girl.png";
 
 const Question = () => {
-  const [drpMenu, setDrpMenu] = useState("");
-  const drpRef = useRef(null);
-
-  const changeSetDrpMenu = (drp) => {
-    if (drpMenu === drp) {
-      setDrpMenu("");
-    } else {
-      setDrpMenu(drp);
-    }
-  };
-
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("");
-  });
 
   return (
     <div className="question">
@@ -40,29 +25,6 @@ const Question = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu("category")}>
-              Category 1
-              <i className="fa fa-chevron-down" />
-            </button>
-            <div
-              className={`drpContent ${
-                drpMenu === "category" ? "show" : "hide"
-              }`}
-            >
-              <ul>
-                <li>
-                  <span> Category 1</span>
-                </li>
-                <li>
-                  <span> Category 2</span>
-                </li>
-                <li>
-                  <span>Category 3</span>
-                </li>
-              </ul>
-            </div>
-          </div>
           <button type="button" className="create">
             New
           </button>
