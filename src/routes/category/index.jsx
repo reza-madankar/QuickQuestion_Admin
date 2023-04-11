@@ -12,14 +12,20 @@ const Category = () => {
   const drpRef = useRef(null);
   const [drpCategory, setDrpCategory] = useState([]);
   const [category, setCategory] = useState(13);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios.get(`/api/Content/category/${category}`).then((response) => {
-      setDrpCategory(
+      if (category === 13) {
+        setDrpCategory(
+          response.data.sort((a, b) => a.title.localeCompare(b.title))
+        );
+      }
+      setCategories(
         response.data.sort((a, b) => a.title.localeCompare(b.title))
       );
     });
-  }, []);
+  }, [category]);
 
   useOutsideDetector(drpRef, drpMenu, () => {
     setDrpMenu("hide");
@@ -44,16 +50,18 @@ const Category = () => {
         </div>
         <div className="right-tools">
           <Select
-          className="drpCategory"
+            className="drpCategory"
             placeholder="Select Category"
+            classNamePrefix="select"
+            isClearable
+            onChange={(option) => {
+              return setCategory(option === null ? 13 : option.value);
+            }}
+            name="color"
             options={drpCategory.map(({ id, title }) => ({
               value: id,
               label: title,
             }))}
-            onInputChange={setCategory}
-            filterOption={(item) => item}
-            inputValue={category}
-            isMulti={false}
           />
           <button type="button" className="create">
             New
@@ -61,121 +69,31 @@ const Category = () => {
         </div>
       </div>
       <div className="items">
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Girl + ")" }}
-          ></div>
-          <h2>Category Title</h2>
-          <p>Category Description Here</p>
+        {categories.map((item, key) => 
+          <div className="item" key={key}>
+            <div
+              className="logo"
+              style={{ backgroundImage: "url(" + Girl + ")" }}
+            ></div>
+            <h2>{item.title}</h2>
+            <p>{item.shortDescription}</p>
 
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
+            <div className="tools">
+              <button type="button">
+                <i className="fa fa-images"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-tags"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-pencil"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-trash"></i>
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Girl + ")" }}
-          ></div>
-          <h2>Category Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Girl + ")" }}
-          ></div>
-          <h2>Category Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Girl + ")" }}
-          ></div>
-          <h2>Category Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Girl + ")" }}
-          ></div>
-          <h2>Category Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
+        )}
       </div>
       <div className="content-footer">
         <div className="pagination">
