@@ -1,36 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
-import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import React, { useState, useEffect } from "react";
+import axios from "utilities/axios";
+import Select from "react-select";
 
 import "../../asset/styles/category.scss";
 
 import Boy from "asset/images/boy.png";
 
 const Content = () => {
-  const [drpMenu, setDrpMenu] = useState("");
   const [drpCategory, setDrpCategory] = useState([]);
-  const [category, setCategory] = useState(13);
+  const [contentId, setContentId] = useState(0);
   const [contents, setContents] = useState([]);
-  const drpRef = useRef(null);
 
   useEffect(() => {
-    axios.get(`/api/Content/category/${category}`).then((response) => {
-        setDrpCategory(
-          response.data.sort((a, b) => a.title.localeCompare(b.title))
-        );
+    axios.get("/api/Content/category/13").then((response) => {
+      const r = response.data
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map((item) => ({
+          label: item.title,
+          options: item.subs.map((s) => ({
+            value: item.id,
+            label: item.title,
+          })),
+        }));
+
+      setDrpCategory(r);
     });
-  }, [category]);
-
-  const changeSetDrpMenu = (drp) => {
-    if (drpMenu === drp) {
-      setDrpMenu("");
-    } else {
-      setDrpMenu(drp);
-    }
-  };
-
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("");
-  });
+  }, []);
 
   return (
     <div className="category">
@@ -50,29 +45,16 @@ const Content = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu("category")}>
-              Category 1
-              <i className="fa fa-chevron-down" />
-            </button>
-            <div
-              className={`drpContent ${
-                drpMenu === "category" ? "show" : "hide"
-              }`}
-            >
-              <ul>
-                <li>
-                  <span> Category 1</span>
-                </li>
-                <li>
-                  <span> Category 2</span>
-                </li>
-                <li>
-                  <span>Category 3</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <Select
+            className="drpCategory"
+            placeholder="Select Category"
+            classNamePrefix="select"
+            isClearable
+            onChange={(option) => {
+              return setContentId(option === null ? 13 : option.value);
+            }}
+            options={drpCategory}
+          />
           <button type="button" className="create">
             New
           </button>

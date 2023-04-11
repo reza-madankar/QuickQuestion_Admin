@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "utilities/axios";
 
@@ -8,8 +7,6 @@ import "../../asset/styles/category.scss";
 import Girl from "asset/images/girl.png";
 
 const Category = () => {
-  const [drpMenu, setDrpMenu] = useState("");
-  const drpRef = useRef(null);
   const [drpCategory, setDrpCategory] = useState([]);
   const [category, setCategory] = useState(13);
   const [categories, setCategories] = useState([]);
@@ -26,10 +23,6 @@ const Category = () => {
       );
     });
   }, [category]);
-
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("hide");
-  });
 
   return (
     <div className="category">
@@ -57,7 +50,6 @@ const Category = () => {
             onChange={(option) => {
               return setCategory(option === null ? 13 : option.value);
             }}
-            name="color"
             options={drpCategory.map(({ id, title }) => ({
               value: id,
               label: title,
