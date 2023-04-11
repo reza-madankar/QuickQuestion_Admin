@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
 
 import "../../asset/styles/category.scss";
@@ -7,7 +7,18 @@ import Boy from "asset/images/boy.png";
 
 const Content = () => {
   const [drpMenu, setDrpMenu] = useState("");
+  const [drpCategory, setDrpCategory] = useState([]);
+  const [category, setCategory] = useState(13);
+  const [contents, setContents] = useState([]);
   const drpRef = useRef(null);
+
+  useEffect(() => {
+    axios.get(`/api/Content/category/${category}`).then((response) => {
+        setDrpCategory(
+          response.data.sort((a, b) => a.title.localeCompare(b.title))
+        );
+    });
+  }, [category]);
 
   const changeSetDrpMenu = (drp) => {
     if (drpMenu === drp) {
