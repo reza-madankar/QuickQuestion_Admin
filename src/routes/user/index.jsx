@@ -1,43 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
-import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import axios from "utilities/axios";
 
 import "../../asset/styles/user.scss";
 
 import Boy from "asset/images/boy.png";
-import Girl from "asset/images/girl.png";
 
 const User = () => {
   const [drprole, setDrpRole] = useState([]);
-  const [drpMenu, setDrpMenu] = useState("hide");
-  const [role, setRole] = useState("All Roles");
-  const drpRef = useRef(null);
+  const [users, setUsers] = useState([]);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("/api/Auth/roles")
-      .then((response) => {
-        setDrpRole(
-          response.data.sort((a, b) => a.title.localeCompare(b.title))
-        );
-      })
-      .catch((ex) => {
-        console.log(ex);
-      });
+    axios.get(`/api/Admin/users/${role}/0`).then((response) => {
+      setUsers(response.data.sort((a, b) => a.name.localeCompare(b.name)));
+    });
+  }, [role]);
+
+  useEffect(() => {
+    axios.get("/api/Admin/roles").then((response) => {
+      setDrpRole(response.data.sort((a, b) => a.title.localeCompare(b.title)));
+    });
   }, []);
-
-  const changeSetDrpMenu = (drp) => {
-    if (drp === null) {
-      setDrpMenu("show");
-    } else {
-      setDrpMenu("hide");
-      setRole(drp);
-    }
-  };
-
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("hide");
-  });
 
   return (
     <div className="users">
@@ -57,273 +41,68 @@ const User = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu(null)}>
-              {role}
-              <i className="fa fa-chevron-down" />
-            </button>
-            <div className={`drpContent ${drpMenu}`}>
-              <ul>
-                <li onClick={() => changeSetDrpMenu("All Roles")}>
-                  <span>All Roles</span>
-                </li>
-                {drprole.map((item, key) => (
-                  <li key={key} onClick={() => changeSetDrpMenu(item.title)}>
-                    <span>{item.title}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <Select
+            className="drpRole"
+            placeholder="Select Role"
+            classNamePrefix="select"
+            isClearable
+            onChange={(option) => {
+              return setRole(option === null ? null : option.value);
+            }}
+            options={drprole.map(({ id, title }) => ({
+              value: id,
+              label: title,
+            }))}
+          />
           <button type="button" className="create">
             New
           </button>
         </div>
       </div>
       <div className="items">
-        <div className="item">
-          <div className="info">
+        {users.map((item, key) => 
+          <div className="item" key={key}>
+            <div className="info">
+              <p>
+                <i className="fa fa-heart" />
+              </p>
+              <p>
+                <i className="fa fa-comment" />
+              </p>
+              <p>
+                <i className="fa fa-comment-dots" />
+              </p>
+              <p>
+                <i className="fa fa-clock-four" />
+                <span>3m</span>
+              </p>
+            </div>
+            <img src={Boy} alt="reza madankar" />
+            <h2>{item.name}</h2>
             <p>
-              <i className="fa fa-heart" />
+              <i className="fa fa-envelope"></i> {item.email}
             </p>
             <p>
-              <i className="fa fa-comment" />
+              <i className="fa fa-users"></i> Admin
             </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3m</span>
-            </p>
-          </div>
-          <img src={Boy} alt="reza madankar" />
-          <h2>Mohammad Reza Madankar</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> Admin
-          </p>
 
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
+            <hr />
+            <div className="tools">
+              <button type="button">
+                <i className="fa fa-pencil" />
+              </button>
+              <button type="button">
+                <i className="fa fa-users" />
+              </button>
+              <button type="button">
+                <i className="fa fa-eye" />
+              </button>
+              <button type="button">
+                <i className="fa fa-trash" />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="item">
-          <div className="info">
-            <p>
-              <i className="fa fa-heart" />
-            </p>
-            <p>
-              <i className="fa fa-comment" />
-            </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3D</span>
-            </p>
-          </div>
-          <img src={Girl} alt="reza madankar" />
-          <h2>Mansoureh Hosseini</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> User
-          </p>
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div className="info">
-            <p>
-              <i className="fa fa-heart" />
-            </p>
-            <p>
-              <i className="fa fa-comment" />
-            </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3m</span>
-            </p>
-          </div>
-          <img src={Boy} alt="reza madankar" />
-          <h2>Mohammad Reza Madankar</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> Admin
-          </p>
-
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div className="info">
-            <p>
-              <i className="fa fa-heart" />
-            </p>
-            <p>
-              <i className="fa fa-comment" />
-            </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3D</span>
-            </p>
-          </div>
-          <img src={Girl} alt="reza madankar" />
-          <h2>Mansoureh Hosseini</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> User
-          </p>
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div className="info">
-            <p>
-              <i className="fa fa-heart" />
-            </p>
-            <p>
-              <i className="fa fa-comment" />
-            </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3m</span>
-            </p>
-          </div>
-          <img src={Boy} alt="reza madankar" />
-          <h2>Mohammad Reza Madankar</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> Admin
-          </p>
-
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div className="info">
-            <p>
-              <i className="fa fa-heart" />
-            </p>
-            <p>
-              <i className="fa fa-comment" />
-            </p>
-            <p>
-              <i className="fa fa-comment-dots" />
-            </p>
-            <p>
-              <i className="fa fa-clock-four" />
-              <span>3D</span>
-            </p>
-          </div>
-          <img src={Girl} alt="reza madankar" />
-          <h2>Mansoureh Hosseini</h2>
-          <p>
-            <i className="fa fa-envelope"></i> m.reza.madankar@gmail.com
-          </p>
-          <p>
-            <i className="fa fa-users"></i> User
-          </p>
-          <hr />
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-users" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
       <div className="content-footer">
         <div className="pagination">

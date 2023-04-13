@@ -12,7 +12,7 @@ const Category = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get(`/api/Content/category/${category}`).then((response) => {
+    axios.get(`/api/Admin/category/${category}`).then((response) => {
       if (category === 13) {
         setDrpCategory(
           response.data.sort((a, b) => a.title.localeCompare(b.title))

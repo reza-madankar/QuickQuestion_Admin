@@ -12,7 +12,7 @@ const Content = () => {
   const [contents, setContents] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/Content/category/13").then((response) => {
+    axios.get("/api/Admin/category/13").then((response) => {
       const r = response.data
         .sort((a, b) => a.title.localeCompare(b.title))
         .map((item) => ({
