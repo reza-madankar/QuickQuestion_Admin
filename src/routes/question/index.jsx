@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "utilities/axios";
 
 import "../../asset/styles/question.scss";
 
@@ -6,6 +7,13 @@ import Boy from "asset/images/boy.png";
 import Girl from "asset/images/girl.png";
 
 const Question = () => {
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/Admin/comment").then((response) => {
+      setQuestions(response.data);
+    });
+  }, []);
 
   return (
     <div className="question">
@@ -31,217 +39,29 @@ const Question = () => {
         </div>
       </div>
       <div className="items">
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
+        {questions.map((item, key) => 
+          <div className="item" key={key}>
+            <img src={Girl} alt="reza madankar" />
+            <div className="comment">
+              <h2>{item.title}</h2>
+              <p>{item.description}</p>
+            </div>
+            <div className="tools">
+              <button type="button">
+                <i className="fa fa-pencil" />
+              </button>
+              <button type="button">
+                <i className="fa fa-eye" />
+              </button>
+              <button type="button">
+                <i className="fa fa-comment-dots" />
+              </button>
+              <button type="button">
+                <i className="fa fa-trash" />
+              </button>
+            </div>
           </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Boy} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Boy} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Girl} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <img src={Boy} alt="reza madankar" />
-          <div className="comment">
-            <h2>Question Title</h2>
-            <p>Question Description</p>
-          </div>
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-pencil" />
-            </button>
-            <button type="button">
-              <i className="fa fa-eye" />
-            </button>
-            <button type="button">
-              <i className="fa fa-comment-dots" />
-            </button>
-            <button type="button">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
       <div className="content-footer">
         <div className="pagination">

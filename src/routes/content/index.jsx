@@ -8,7 +8,7 @@ import Boy from "asset/images/boy.png";
 
 const Content = () => {
   const [drpCategory, setDrpCategory] = useState([]);
-  const [contentId, setContentId] = useState(0);
+  const [contentId, setContentId] = useState(null);
   const [contents, setContents] = useState([]);
 
   useEffect(() => {
@@ -18,14 +18,20 @@ const Content = () => {
         .map((item) => ({
           label: item.title,
           options: item.subs.map((s) => ({
-            value: item.id,
-            label: item.title,
+            value: s.id,
+            label: s.title,
           })),
         }));
 
       setDrpCategory(r);
     });
   }, []);
+
+  useEffect(() => {
+    axios.get(`/api/Admin/blogs/${contentId}`).then((response) => {
+      setContents(response.data);
+    });
+  }, [contentId]);
 
   return (
     <div className="category">
@@ -51,7 +57,7 @@ const Content = () => {
             classNamePrefix="select"
             isClearable
             onChange={(option) => {
-              return setContentId(option === null ? 13 : option.value);
+              return setContentId(option === null ? null : option.value);
             }}
             options={drpCategory}
           />
@@ -61,121 +67,31 @@ const Content = () => {
         </div>
       </div>
       <div className="items">
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
+        {contents.map((item, key) => (
+          <div className="item">
+            <div
+              className="logo"
+              style={{ backgroundImage: "url(" + Boy + ")" }}
+            ></div>
+            <h2>{item.title}</h2>
+            <p>{item.shortDescription}</p>
 
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
+            <div className="tools">
+              <button type="button">
+                <i className="fa fa-images"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-tags"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-pencil"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-trash"></i>
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
+        ))}
       </div>
       <div className="content-footer">
         <div className="pagination">
