@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "utilities/axios";
+import Modal from "component/modal";
+import RoleModal from "./components/roleModal";
+import ModifyModal from "./components/modifyModal";
 
 import "../../asset/styles/user.scss";
 
@@ -10,6 +13,8 @@ const User = () => {
   const [drprole, setDrpRole] = useState([]);
   const [users, setUsers] = useState([]);
   const [role, setRole] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [modal, setModal] = useState("");
 
   useEffect(() => {
     axios.get(`/api/Admin/users/${role}/0`).then((response) => {
@@ -22,6 +27,35 @@ const User = () => {
       setDrpRole(response.data.sort((a, b) => a.title.localeCompare(b.title)));
     });
   }, []);
+
+  const showModal = (id, name) => {
+    setModal(name);
+    setUserId(id);
+  };
+
+  const changeActive = (id) => {
+    axios.get(`/api/Admin/changeUserActive/${id}`).then((response) => {
+      if (response.data === true) {
+        setUsers((prev) =>
+          prev.map((x) => (x.id === id ? { ...x, active: !x.active } : x))
+        );
+      }
+    });
+  };
+
+  const changeSubscribe = (id) => {
+    axios.get(`/api/Admin/changeUserSubscribe/${id}`).then((response) => {
+      if (response.data === true) {
+        setUsers((prev) =>
+          prev.map((x) => (x.id === id ? { ...x, subscribe: !x.subscribe } : x))
+        );
+      }
+    });
+  };
+
+  const resetPassword = (id) => {
+    axios.get(`/api/Admin/userResetPassword/${id}`).then((response) => {});
+  };
 
   return (
     <div className="users">
@@ -60,7 +94,7 @@ const User = () => {
         </div>
       </div>
       <div className="items">
-        {users.map((item, key) => 
+        {users.map((item, key) => (
           <div className="item" key={key}>
             <div className="info">
               <p>
@@ -88,21 +122,35 @@ const User = () => {
 
             <hr />
             <div className="tools">
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => showModal(item.id, "User Modify")}
+              >
                 <i className="fa fa-pencil" />
               </button>
-              <button type="button">
+              <button type="button" onClick={() => showModal(item.id, "Roles")}>
                 <i className="fa fa-users" />
               </button>
-              <button type="button">
-                <i className="fa fa-eye" />
+              <button type="button" onClick={() => changeActive(item.id)}>
+                {item.active === false ? (
+                  <i className="fa fa-lock-open" />
+                ) : (
+                  <i className="fa fa-lock" />
+                )}
               </button>
-              <button type="button">
-                <i className="fa fa-trash" />
+              <button type="button" onClick={() => changeSubscribe(item.id)}>
+                {item.subscribe === false ? (
+                  <i className="fa fa-bell" />
+                ) : (
+                  <i className="fa fa-bell-slash" />
+                )}
+              </button>
+              <button type="button" onClick={() => resetPassword(item.id)}>
+                <i className="fa fa-key" />
               </button>
             </div>
           </div>
-        )}
+        ))}
       </div>
       <div className="content-footer">
         <div className="pagination">
@@ -118,6 +166,13 @@ const User = () => {
           <a href="#">&raquo;</a>
         </div>
       </div>
+      <Modal isOpen={modal !== ""}>
+        {modal === "User Modify" ? (
+          <ModifyModal userId={userId} closeModal={setModal} />
+        ) : (
+          <RoleModal userId={userId} closeModal={setModal} />
+        )}
+      </Modal>
     </div>
   );
 };

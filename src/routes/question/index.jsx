@@ -3,7 +3,6 @@ import axios from "utilities/axios";
 
 import "../../asset/styles/question.scss";
 
-import Boy from "asset/images/boy.png";
 import Girl from "asset/images/girl.png";
 
 const Question = () => {
