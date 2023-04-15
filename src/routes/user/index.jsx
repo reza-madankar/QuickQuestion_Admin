@@ -117,7 +117,7 @@ const User = () => {
               <i className="fa fa-envelope"></i> {item.email}
             </p>
             <p>
-              <i className="fa fa-users"></i> Admin
+              <i className="fa fa-users"></i> {item.roles?.map(u => u.title).join(', ')}
             </p>
 
             <hr />
@@ -168,9 +168,9 @@ const User = () => {
       </div>
       <Modal isOpen={modal !== ""}>
         {modal === "User Modify" ? (
-          <ModifyModal userId={userId} closeModal={setModal} />
+          <ModifyModal userId={userId} closeModal={setModal} setUsers={setUsers} />
         ) : (
-          <RoleModal userId={userId} closeModal={setModal} />
+          <RoleModal userId={userId} closeModal={setModal} setUsers={setUsers}  />
         )}
       </Modal>
     </div>

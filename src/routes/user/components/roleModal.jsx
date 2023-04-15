@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
 
-const RoleModal = ({ userId, closeModal }) => {
+const RoleModal = ({ userId, closeModal, setUsers }) => {
   const [roles, setRoles] = useState([]);
   const [user, setUser] = useState({});
 
@@ -20,18 +20,26 @@ const RoleModal = ({ userId, closeModal }) => {
       .get(`/api/Admin/addOrRemoveUserRole/${userId}/${roleId}`)
       .then((response) => {
         if (response) {
+          const _roles = user.roles.find((x) => x.id === roleId)
+            ? user.roles.filter((f) => f.id !== roleId)
+            : [
+                ...user.roles,
+                {
+                  title: roles.filter((r) => r.id === roleId)[0].title,
+                  id: roleId,
+                },
+              ];
+
           setUser((prev) => ({
             ...prev,
-            roles: prev.roles.find((x) => x.id === roleId)
-              ? prev.roles.filter((f) => f.id !== roleId)
-              : [
-                  ...prev.roles,
-                  {
-                    title: roles.filter((r) => r.id === roleId)[0].title,
-                    id: roleId,
-                  },
-                ],
+            roles: _roles
           }));
+
+          setUsers((prev) =>
+            prev.map((x) =>
+              x.id === user.id ? { ...x, roles: _roles } : x
+            )
+          );
         }
       });
   };
