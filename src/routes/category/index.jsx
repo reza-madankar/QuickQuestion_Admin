@@ -14,11 +14,12 @@ import Girl from "asset/images/girl.png";
 const Category = () => {
   const [drpCategory, setDrpCategory] = useState([]);
   const [category, setCategory] = useState(13);
+  const [categoryIdSelected, setCategoryIdSelected] = useState(null);
   const [categories, setCategories] = useState([]);
   const [modal, setModal] = useState("");
 
   useEffect(() => {
-    axios.get(`/api/Admin/category/${category}`).then((response) => {
+    axios.get(`/api/Admin/categories/${category}`).then((response) => {
       if (category === 13) {
         setDrpCategory(
           response.data.sort((a, b) => a.title.localeCompare(b.title))
@@ -64,7 +65,10 @@ const Category = () => {
           <button
             type="button"
             className="create"
-            onClick={() => setModal("New Or Modify category")}
+            onClick={() => {
+              setModal("New Or Modify category");
+              setCategoryIdSelected(0);
+            }}
           >
             New
           </button>
@@ -89,7 +93,10 @@ const Category = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setModal("New Or Modify category")}
+                onClick={() => {
+                  setModal("New Or Modify category");
+                  setCategoryIdSelected(item.id);
+                }}
               >
                 <i className="fa fa-pencil"></i>
               </button>
@@ -118,7 +125,7 @@ const Category = () => {
         {(() => {
           switch (modal) {
             case "New Or Modify category":
-              return <ModifyModal closeModal={setModal} />;
+              return <ModifyModal closeModal={setModal} id={categoryIdSelected} />;
             case "Gallery":
               return <Gallery closeModal={setModal} />;
             case "Tags":

@@ -12,18 +12,18 @@ const Content = () => {
   const [contents, setContents] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/Admin/category/13").then((response) => {
-      const r = response.data
-        .sort((a, b) => a.title.localeCompare(b.title))
-        .map((item) => ({
-          label: item.title,
-          options: item.subs.map((s) => ({
-            value: s.id,
-            label: s.title,
-          })),
-        }));
-
-      setDrpCategory(r);
+    axios.get("/api/Admin/categories/13").then((response) => {
+      setDrpCategory(
+        response.data
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((item) => ({
+            label: item.title,
+            options: item.subs.map((s) => ({
+              value: s.id,
+              label: s.title,
+            })),
+          }))
+      );
     });
   }, []);
 
