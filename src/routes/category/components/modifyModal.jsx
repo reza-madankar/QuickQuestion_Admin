@@ -2,23 +2,23 @@ import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
 import Select from "react-select";
 
-const ModifyModal = ({ id = 0, closeModal }) => {
+const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
   const [drpCategory, setDrpCategory] = useState([]);
-  const [categoryId, setCategoryId] = useState(null);
-  const [categorySuperId, setCategorySuperId] = useState(null);
+  const [categoryId, setCategoryId] = useState(0);
+  const [categorySuperId, setCategorySuperId] = useState(13);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [metakey, setMetaKey] = useState("");
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    axios.get(`/api/Admin/categories/13`).then((response) => {
+    axios.get(`/api/Admin/category/getAll/13`).then((response) => {
       setDrpCategory(
         response.data
           .sort((a, b) => a.title.localeCompare(b.title))
           .map((item) => ({
             label: item.title,
-            id: item.id,
+            value: item.id,
           }))
       );
     });
@@ -39,21 +39,23 @@ const ModifyModal = ({ id = 0, closeModal }) => {
 
   const submitModify = () => {
     axios
-      .post("/api/Admin/AddorUpdateCategory", {
+      .post("/api/Admin/category/insetorupdate", {
         id: categoryId,
         title: title,
-        description: description,
-        metakey: metakey,
+        shortDescription: description,
+        metaTags: metakey,
         content: content,
+        superId: categorySuperId,
       })
       .then((response) => {
-        // if (response) {
-        //   setUsers((prev) =>
-        //     prev.map((x) =>
-        //       x.id === user.id ? { ...x, name: name, email: email } : x
-        //     )
-        //   );
-        // }
+        if (response.data === true) {
+          getCategories(categorySuperId);
+          setTitle("");
+          setDescription("");
+          setMetaKey("");
+          setContent("");
+          setCategoryId(0);
+        }
       });
   };
 
@@ -76,7 +78,7 @@ const ModifyModal = ({ id = 0, closeModal }) => {
             onChange={(option) => {
               return setCategorySuperId(option === null ? 13 : option.value);
             }}
-            value={drpCategory.filter((x) => x.id === categorySuperId)[0]}
+            value={drpCategory.filter((x) => x.value === categorySuperId)[0]}
             options={drpCategory}
           />
         </div>

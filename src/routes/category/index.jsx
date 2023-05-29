@@ -4,7 +4,8 @@ import axios from "utilities/axios";
 import Modal from "component/modal";
 
 import Gallery from "component/modal/components/gallery";
-import Tags from "component/modal/components/tags";
+import MainImage from "component/modal/components/mainImage";
+// import Tags from "component/modal/components/tags";
 import ModifyModal from "./components/modifyModal";
 
 import "../../asset/styles/category.scss";
@@ -19,8 +20,12 @@ const Category = () => {
   const [modal, setModal] = useState("");
 
   useEffect(() => {
-    axios.get(`/api/Admin/categories/${category}`).then((response) => {
-      if (category === 13) {
+    getCategories(category);
+  }, [category]);
+
+  const getCategories = (id) => {
+    axios.get(`/api/Admin/category/getAll/${id}`).then((response) => {
+      if (id === 13) {
         setDrpCategory(
           response.data.sort((a, b) => a.title.localeCompare(b.title))
         );
@@ -29,7 +34,15 @@ const Category = () => {
         response.data.sort((a, b) => a.title.localeCompare(b.title))
       );
     });
-  }, [category]);
+  };
+
+  const removeCategory = (id) => {
+    axios.delete(`/api/Admin/category/remove/${id}`).then((response) => {
+      if (response.data === true) {
+        getCategories(category);
+      }
+    });
+  };
 
   return (
     <div className="category">
@@ -37,7 +50,7 @@ const Category = () => {
         <h2>Category</h2>
         <ul>
           <li>
-            <a href="#">OverView</a>
+            <a href="/">OverView</a>
           </li>
           <li>/</li>
           <li>Category</li>
@@ -79,17 +92,24 @@ const Category = () => {
           <div className="item" key={key}>
             <div
               className="logo"
+              onClick={() => {
+                setModal("Mian Image");
+                setCategoryIdSelected(item.id);
+              }}
               style={{ backgroundImage: "url(" + Girl + ")" }}
             ></div>
             <h2>{item.title}</h2>
             <p>{item.shortDescription}</p>
 
             <div className="tools">
-              <button type="button" onClick={() => setModal("Gallery")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Gallery");
+                  setCategoryIdSelected(item.id);
+                }}
+              >
                 <i className="fa fa-images"></i>
-              </button>
-              <button type="button" onClick={() => setModal("Tags")}>
-                <i className="fa fa-tags"></i>
               </button>
               <button
                 type="button"
@@ -100,15 +120,15 @@ const Category = () => {
               >
                 <i className="fa fa-pencil"></i>
               </button>
-              <button type="button">
+              <button type="button" onClick={() => removeCategory(item.id)}>
                 <i className="fa fa-trash"></i>
               </button>
             </div>
           </div>
         ))}
       </div>
-      <div className="content-footer">
-        <div className="pagination">
+      {/*  <div className="content-footer">
+       <div className="pagination">
           <a href="#">&laquo;</a>
           <a href="#">1</a>
           <a href="#" className="active">
@@ -120,23 +140,36 @@ const Category = () => {
           <a href="#">6</a>
           <a href="#">&raquo;</a>
         </div>
-      </div>
+      </div> */}
       <Modal isOpen={modal !== ""}>
         {(() => {
           switch (modal) {
             case "New Or Modify category":
-              return <ModifyModal closeModal={setModal} id={categoryIdSelected} />;
+              return (
+                <ModifyModal
+                  closeModal={setModal}
+                  id={categoryIdSelected}
+                  getCategories={getCategories}
+                />
+              );
             case "Gallery":
-              return <Gallery closeModal={setModal} />;
-            case "Tags":
-              return <Tags closeModal={setModal} />;
+              return (
+                <Gallery
+                  closeModal={setModal}
+                  categoryId={categoryIdSelected}
+                />
+              );
+            case "Mian Image":
+              return (
+                <MainImage
+                  closeModal={setModal}
+                  categoryId={categoryIdSelected}
+                />
+              );
+            default:
+              return null;
           }
         })()}
-        {/* modal === "" ? (
-          <ModifyModal userId={userId} closeModal={setModal} setUsers={setUsers} />
-        ) : (
-          <RoleModal userId={userId} closeModal={setModal} setUsers={setUsers}  />
-        )} */}
       </Modal>
     </div>
   );

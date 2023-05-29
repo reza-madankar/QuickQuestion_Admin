@@ -1,7 +1,6 @@
 @import "./main/colors";
 
 .category {
-
   .drpCategory {
     width: 300px;
     margin-right: 10px;
@@ -37,12 +36,20 @@
 
       .logo {
         position: absolute;
-        left: 0;
-        top: 0px;
+        left: 5px;
+        top: 5px;
         width: 100px;
         height: 100px;
         background-repeat: no-repeat;
         background-size: cover;
+        border: 1px solid $clrWhite;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: 0.5s all;
+
+        &:hover {
+          border: 1px solid $clrBlue;
+        }
       }
 
       .tools {
@@ -128,9 +135,55 @@
           border: 1px solid $clrBlue;
         }
       }
-      .drpCategory{
+      .drpCategory {
         width: 322px;
         margin-right: 0;
+      }
+      .drpImageType {
+        width: 323px;
+      }
+      .card-img {
+        height: 110px;
+        float: right;
+      }
+    }
+
+    .galleries {
+      width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $clrGrey600;
+    align-content: center;
+    transition: 0.3s all;
+
+
+      img {
+        width: 200px;
+      }
+
+      button {
+        background-color: #ffffff00;
+        margin: 5px 0px;
+        border: 1px solid $clrWhite;
+        font-size: 16px;
+        color: $clrGray500;
+        cursor: pointer;
+        transition: 0.45s all;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $clrBlue;
+          border: 1px solid $clrAqua;
+        }
+      }
+
+      &:hover{
+        background-color: $clrGrey600;
       }
     }
   }
