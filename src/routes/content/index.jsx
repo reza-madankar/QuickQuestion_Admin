@@ -1,25 +1,37 @@
-import React, { useState, useRef } from "react";
-import useOutsideDetector from "component/hooks/useDetectClickOutsideElement";
+import React, { useState, useEffect } from "react";
+import axios from "utilities/axios";
+import Select from "react-select";
 
 import "../../asset/styles/category.scss";
 
 import Boy from "asset/images/boy.png";
 
 const Content = () => {
-  const [drpMenu, setDrpMenu] = useState("");
-  const drpRef = useRef(null);
+  const [drpCategory, setDrpCategory] = useState([]);
+  const [contentId, setContentId] = useState(null);
+  const [contents, setContents] = useState([]);
 
-  const changeSetDrpMenu = (drp) => {
-    if (drpMenu === drp) {
-      setDrpMenu("");
-    } else {
-      setDrpMenu(drp);
-    }
-  };
+  useEffect(() => {
+    axios.get("/api/Admin/categories/13").then((response) => {
+      setDrpCategory(
+        response.data
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((item) => ({
+            label: item.title,
+            options: item.subs.map((s) => ({
+              value: s.id,
+              label: s.title,
+            })),
+          }))
+      );
+    });
+  }, []);
 
-  useOutsideDetector(drpRef, drpMenu, () => {
-    setDrpMenu("");
-  });
+  useEffect(() => {
+    axios.get(`/api/Admin/blogs/${contentId}`).then((response) => {
+      setContents(response.data);
+    });
+  }, [contentId]);
 
   return (
     <div className="category">
@@ -39,150 +51,47 @@ const Content = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <div className="drpBox" ref={drpRef}>
-            <button type="button" onClick={() => changeSetDrpMenu("category")}>
-              Category 1
-              <i className="fa fa-chevron-down" />
-            </button>
-            <div
-              className={`drpContent ${
-                drpMenu === "category" ? "show" : "hide"
-              }`}
-            >
-              <ul>
-                <li>
-                  <span> Category 1</span>
-                </li>
-                <li>
-                  <span> Category 2</span>
-                </li>
-                <li>
-                  <span>Category 3</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <Select
+            className="drpCategory"
+            placeholder="Select Category"
+            classNamePrefix="select"
+            isClearable
+            onChange={(option) => {
+              return setContentId(option === null ? null : option.value);
+            }}
+            options={drpCategory}
+          />
           <button type="button" className="create">
             New
           </button>
         </div>
       </div>
       <div className="items">
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
+        {contents.map((item, key) => (
+          <div className="item">
+            <div
+              className="logo"
+              style={{ backgroundImage: "url(" + Boy + ")" }}
+            ></div>
+            <h2>{item.title}</h2>
+            <p>{item.shortDescription}</p>
 
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
+            <div className="tools">
+              <button type="button">
+                <i className="fa fa-images"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-tags"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-pencil"></i>
+              </button>
+              <button type="button">
+                <i className="fa fa-trash"></i>
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div
-            className="logo"
-            style={{ backgroundImage: "url(" + Boy + ")" }}
-          ></div>
-          <h2>Content Title</h2>
-          <p>Category Description Here</p>
-
-          <div className="tools">
-            <button type="button">
-              <i className="fa fa-images"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-tags"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button type="button">
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
-        </div>
+        ))}
       </div>
       <div className="content-footer">
         <div className="pagination">

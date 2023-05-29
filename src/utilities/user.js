@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import jwtDecode from "jwt-decode";
+import axios from "utilities/axios";
 
 const storedUser = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
@@ -44,6 +45,15 @@ export function useUserState() {
 
   const isUserAuthenticated = () => {
     if (user.token === "") return false;
+
+    axios
+      .get("api/Auth/authenticated")
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
 
     const decodedToken = jwtDecode(user.token);
     const currentDate = new Date();

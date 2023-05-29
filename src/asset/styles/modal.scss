@@ -20,10 +20,64 @@
   display: block;
   position: relative;
   overflow: hidden;
-  background-color: $clrWhite;
+  background-color: $clrGray1300;
   padding: 2rem;
   border-radius: 0.75rem;
-  box-shadow: 0 0.1875rem 0.5rem rgb($clrBlack, 0.2);
+  box-shadow: 0 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
+  min-width: 550px;
+  min-height: 300px;
+
+  .modal-header {
+    min-height: 30px;
+    line-height: 30px;
+    text-align: left;
+    border-bottom: 1px solid $clrGray900;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+
+    h2 {
+      float: left;
+    }
+
+    button {
+      background-color: unset;
+      border: none;
+      float: right;
+      font-size: 30px;
+      transition: 0.4s all;
+      cursor: pointer;
+
+      &:hover {
+        color: $clrBlue;
+      }
+    }
+  }
+
+  .modal-footer {
+    position: absolute;
+    bottom: 2rem;
+    border-top: 1px solid $clrGray900;
+    right: 2rem;
+    left: 2rem;
+    margin-top: 10px;
+    padding-top: 10px;
+
+    button {
+      padding: 10px 30px;
+      border-radius: 3px;
+      background-color: $clrBlue;
+      float: right;
+      border: none;
+      color: $clrWhite;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.4s all;
+
+      &:hover {
+        background-color: $clrdarkBlue;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 800px) {
