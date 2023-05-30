@@ -4,6 +4,7 @@
   .drpCategory {
     width: 300px;
     margin-right: 10px;
+    z-index: 10;
   }
 
   .items {
@@ -150,12 +151,11 @@
 
     .galleries {
       width: 100%;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid $clrGrey600;
-    align-content: center;
-    transition: 0.3s all;
-
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid $clrGrey600;
+      align-content: center;
+      transition: 0.3s all;
 
       img {
         width: 200px;
@@ -182,9 +182,13 @@
         }
       }
 
-      &:hover{
+      &:hover {
         background-color: $clrGrey600;
       }
     }
+  }
+
+  .modal-category-content {
+    height: 85vh;
   }
 }

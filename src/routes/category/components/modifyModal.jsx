@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 import axios from "utilities/axios";
 import Select from "react-select";
 
@@ -10,7 +11,8 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
   const [description, setDescription] = useState("");
   const [metakey, setMetaKey] = useState("");
   const [content, setContent] = useState("");
-
+  const editorRef = useRef(null);
+ 
   useEffect(() => {
     axios.get(`/api/Admin/category/getAll/13`).then((response) => {
       setDrpCategory(
@@ -44,7 +46,7 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         title: title,
         shortDescription: description,
         metaTags: metakey,
-        content: content,
+        content: editorRef.current.getContent(),
         superId: categorySuperId,
       })
       .then((response) => {
@@ -67,7 +69,7 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
           <i className="fa fa-xmark" />
         </button>
       </div>
-      <div className="modal-content">
+      <div className="modal-content modal-category-content">
         <div className="controller">
           <label>Parent Category</label>
           <Select
@@ -111,10 +113,53 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         </div>
         <div className="controller">
           <label>Content</label>
-          <input
+          {/* <input
             type="text"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+          /> */}{" "}
+        </div>
+        <div className="controller">
+          <Editor
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            initialValue="<p>This is the initial content of the editor.</p>"
+            init={{
+              selector: "textarea#emoticons",
+              height: 300,
+              plugins: [
+                "advlist",
+                "anchor",
+                "autolink",
+                "charmap",
+                "code",
+                "fullscreen",
+                "help",
+                "image",
+                "insertdatetime",
+                "link",
+                "lists",
+                "media",
+                "preview",
+                "searchreplace",
+                "table",
+                "visualblocks",
+                "lists code emoticons",
+              ],
+              toolbar:
+                "cut copy paste pastetext | undo redo | searchreplace | selectall | link unlink anchor | " +
+                "image| table | hr| charmap  |fullscreen | code |" +
+                "bold italic underline strikethrough subscript superscript | removeformat |" +
+                "numlist bullist | outdent indent | blockquote | alignleft aligncenter alignright alignjustify |" +
+                "blocks fontfamily fontsize | forecolor backcolor| emoticons",
+              emoticons_append: {
+                custom_mind_explode: {
+                  keywords: ["brain", "mind", "explode", "blown"],
+                  char: "🤯",
+                },
+              },
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
           />
         </div>
       </div>
