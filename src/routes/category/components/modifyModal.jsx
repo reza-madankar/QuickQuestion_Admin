@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 import axios from "utilities/axios";
 import Select from "react-select";
 
-const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
+const ModifyModal = ({ id = 0, closeModal, setCategories }) => {
   const [drpCategory, setDrpCategory] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
   const [categorySuperId, setCategorySuperId] = useState(13);
@@ -10,6 +11,7 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
   const [description, setDescription] = useState("");
   const [metakey, setMetaKey] = useState("");
   const [content, setContent] = useState("");
+  const editorRef = useRef(null);
 
   useEffect(() => {
     axios.get(`/api/Admin/category/getAll/13`).then((response) => {
@@ -33,6 +35,8 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         setContent(response.data.content);
         setCategoryId(response.data.id);
         setCategorySuperId(response.data.super.id);
+
+        console.log(response.data);
       });
     }
   }, [id]);
@@ -44,17 +48,19 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         title: title,
         shortDescription: description,
         metaTags: metakey,
-        content: content,
+        content: editorRef.current.getContent(),
         superId: categorySuperId,
       })
       .then((response) => {
-        if (response.data === true) {
-          getCategories(categorySuperId);
-          setTitle("");
-          setDescription("");
-          setMetaKey("");
-          setContent("");
-          setCategoryId(0);
+        if (response.data !== null) {
+          setCategories((prev) => {
+            if (prev.some((x) => x.id === categoryId)) {
+              return prev.map((x) => (x.id === categoryId ? response.data : x));
+            } else {
+              return [...prev, response.data];
+            }
+          });
+          closeModal("");
         }
       });
   };
@@ -67,7 +73,7 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
           <i className="fa fa-xmark" />
         </button>
       </div>
-      <div className="modal-content">
+      <div className="modal-content modal-category-content">
         <div className="controller">
           <label>Parent Category</label>
           <Select
@@ -110,11 +116,48 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
           />
         </div>
         <div className="controller">
-          <label>Content</label>
-          <input
-            type="text"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+          <Editor
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            initialValue={
+              content || "<p>This is the initial content of the editor.</p>"
+            }
+            init={{
+              selector: "textarea#emoticons",
+              height: 300,
+              plugins: [
+                "advlist",
+                "anchor",
+                "autolink",
+                "charmap",
+                "code",
+                "fullscreen",
+                "help",
+                "image",
+                "insertdatetime",
+                "link",
+                "lists",
+                "media",
+                "preview",
+                "searchreplace",
+                "table",
+                "visualblocks",
+                "lists code emoticons",
+              ],
+              toolbar:
+                "cut copy paste pastetext | undo redo | searchreplace | selectall | link unlink anchor | " +
+                "image| table | hr| charmap  |fullscreen | code |" +
+                "bold italic underline strikethrough subscript superscript | removeformat |" +
+                "numlist bullist | outdent indent | blockquote | alignleft aligncenter alignright alignjustify |" +
+                "blocks fontfamily fontsize | forecolor backcolor| emoticons",
+              emoticons_append: {
+                custom_mind_explode: {
+                  keywords: ["brain", "mind", "explode", "blown"],
+                  char: "🤯",
+                },
+              },
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
           />
         </div>
       </div>
