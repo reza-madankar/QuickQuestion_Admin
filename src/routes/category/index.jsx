@@ -3,8 +3,8 @@ import Select from "react-select";
 import axios from "utilities/axios";
 import Modal from "component/modal";
 
-import Gallery from "component/modal/components/gallery";
-import MainImage from "component/modal/components/mainImage";
+import Gallery from "./components/gallery";
+import MainImage from "./components/mainImage";
 // import Tags from "component/modal/components/tags";
 import ModifyModal from "./components/modifyModal";
 
