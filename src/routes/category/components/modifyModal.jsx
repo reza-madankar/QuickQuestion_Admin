@@ -3,7 +3,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "utilities/axios";
 import Select from "react-select";
 
-const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
+const ModifyModal = ({ id = 0, closeModal, setCategories }) => {
   const [drpCategory, setDrpCategory] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
   const [categorySuperId, setCategorySuperId] = useState(13);
@@ -12,7 +12,7 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
   const [metakey, setMetaKey] = useState("");
   const [content, setContent] = useState("");
   const editorRef = useRef(null);
- 
+
   useEffect(() => {
     axios.get(`/api/Admin/category/getAll/13`).then((response) => {
       setDrpCategory(
@@ -35,6 +35,8 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         setContent(response.data.content);
         setCategoryId(response.data.id);
         setCategorySuperId(response.data.super.id);
+
+        console.log(response.data);
       });
     }
   }, [id]);
@@ -50,13 +52,15 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
         superId: categorySuperId,
       })
       .then((response) => {
-        if (response.data === true) {
-          getCategories(categorySuperId);
-          setTitle("");
-          setDescription("");
-          setMetaKey("");
-          setContent("");
-          setCategoryId(0);
+        if (response.data !== null) {
+          setCategories((prev) => {
+            if (prev.some((x) => x.id === categoryId)) {
+              return prev.map((x) => (x.id === categoryId ? response.data : x));
+            } else {
+              return [...prev, response.data];
+            }
+          });
+          closeModal("");
         }
       });
   };
@@ -112,17 +116,11 @@ const ModifyModal = ({ id = 0, closeModal, getCategories }) => {
           />
         </div>
         <div className="controller">
-          <label>Content</label>
-          {/* <input
-            type="text"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          /> */}{" "}
-        </div>
-        <div className="controller">
           <Editor
             onInit={(evt, editor) => (editorRef.current = editor)}
-            initialValue="<p>This is the initial content of the editor.</p>"
+            initialValue={
+              content || "<p>This is the initial content of the editor.</p>"
+            }
             init={{
               selector: "textarea#emoticons",
               height: 300,

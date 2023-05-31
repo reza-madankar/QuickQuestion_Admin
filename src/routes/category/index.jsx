@@ -149,7 +149,7 @@ const Category = () => {
                 <ModifyModal
                   closeModal={setModal}
                   id={categoryIdSelected}
-                  getCategories={getCategories}
+                  setCategories={setCategories}
                 />
               );
             case "Gallery":
