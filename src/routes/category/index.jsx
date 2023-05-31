@@ -5,7 +5,6 @@ import Modal from "component/modal";
 
 import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
-// import Tags from "component/modal/components/tags";
 import ModifyModal from "./components/modifyModal";
 
 import "../../asset/styles/category.scss";
