@@ -43,7 +43,7 @@ body {
     position: relative;
 
     input[type="text"],
-    input[type="password"]  {
+    input[type="password"] {
       line-height: 30px;
       width: calc(100% - 20px);
       border-radius: 3px;
@@ -141,7 +141,7 @@ body {
         .formController {
           width: 60%;
 
-          input[type="text"]{
+          input[type="text"] {
             width: calc(100% - 45px);
             padding: 0 10px 0 35px;
 
@@ -567,5 +567,21 @@ body {
         }
       }
     }
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $clrWhite;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $clrGray900;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: $clrGray700;
   }
 }

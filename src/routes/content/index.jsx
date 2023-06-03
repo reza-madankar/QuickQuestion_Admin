@@ -5,10 +5,10 @@ import Modal from "component/modal";
 
 import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
-import Tags from "component/modal/components/tags";
+import Tags from "./components/tags";
 import ModifyModal from "./components/modifyModal";
 
-import "../../asset/styles/category.scss";
+import "asset/styles/category.scss";
 
 import Boy from "asset/images/boy.png";
 
@@ -113,7 +113,13 @@ const Content = () => {
               >
                 <i className="fa fa-images"></i>
               </button>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Tag");
+                  setContentId(item.id);
+                }}
+              >
                 <i className="fa fa-tags"></i>
               </button>
               <button
@@ -161,6 +167,8 @@ const Content = () => {
               return <Gallery closeModal={setModal} blogId={contentId} />;
             case "Mian Image":
               return <MainImage closeModal={setModal} blogId={contentId} />;
+            case "Tag":
+              return <Tags closeModal={setModal} blogId={contentId} />;
             default:
               return null;
           }

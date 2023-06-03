@@ -1,171 +1,144 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
-import Select from "react-select";
 import { toast } from "react-hot-toast";
 
-const Tags = ({ categoryId, closeModal }) => {
-  const [assets, setAssets] = useState([]);
-  const [values, setValues] = useState({
-    categoryId: categoryId,
-    assetId: "",
-    imageFile: null,
-    assetType: null,
-    imageSrc: "",
-  });
+import "asset/styles/tags.scss";
+
+const Tags = ({ blogId, closeModal }) => {
+  const [tagTitle, setTagTitle] = useState("");
+  const [tags, setTags] = useState([]);
+  const [contentTags, setTontentTags] = useState([]);
 
   useEffect(() => {
-    if (categoryId > 0) {
+    if (blogId > 0) {
+      axios.get(`/api/Admin/tag/getAll`).then((response) => {
+        if (response.data && response.data.length > 0) {
+          setTags(response.data);
+        }
+      });
+
+      axios.get(`/api/Admin/tag/getBlogTagsAll/${blogId}`).then((response) => {
+        if (response.data && response.data.length > 0) {
+          setTontentTags(response.data);
+        }
+      });
+    }
+  }, [blogId]);
+
+  const AddTagToContent = (item) => {
+    if (contentTags.some((x) => x.tagId === item.tagId) === false) {
       axios
-        .get(`/api/Admin/category/getAllAssets/${categoryId}`)
+        .post(`/api/Admin/tag/insetBlogTag`, {
+          blogId: blogId,
+          tagId: item.id,
+        })
         .then((response) => {
-          if (response.data && response.data.length > 0) {
-            setAssets(response.data.filter((x) => x.assetType !== 0));
+          if (response.data && response.data.id > 0) {
+            setTontentTags((old) => [...old, {
+              id: response.data.id,
+              title: item.title,
+              tagId: item.id,
+              blogId: blogId
+            }]);
           }
         });
     }
-  }, [categoryId]);
-
-  const handleSubmit = async (e) => {
-    if (values.assetType) {
-      e.preventDefault();
-      const formData = new FormData();
-      formData.append("imageFile", values.imageFile);
-      formData.append("assetType", values.assetType);
-      formData.append("categoryId", categoryId);
-
-      try {
-        const response = await axios.post(
-          "/api/Admin/category/insertasset",
-          formData
-        );
-
-        setAssets((oldArray) => [
-          ...oldArray,
-          {
-            assetType: response.data.assetType,
-            categoryId: response.data.categoryId,
-            fileNmae: response.data.fileName,
-            id: response.data.id,
-          },
-        ]);
-
-        setValues({
-          categoryId: categoryId,
-          assetId: "",
-          imageFile: null,
-          assetType: null,
-          imageSrc: "",
-        });
-
-        document.getElementById("imageFile").value = "";
-
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      toast.error("Please Select image type.");
-    }
   };
 
-  const showPreview = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let imageFile = e.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = (x) => {
-        setValues({
-          ...values,
-          imageFile,
-          imageSrc: x.target.result,
-        });
-      };
-      reader.readAsDataURL(imageFile);
-    } else {
-      setValues({
-        ...values,
-        imageFile: null,
-        imageSrc: "",
-      });
-    }
-  };
-
-  const removeAsset = (id) => {
-    axios.delete(`/api/Admin/category/removeAsset/${id}`).then((response) => {
+  const removeTagFromContent = (item) => {
+    axios.delete(`/api/Admin/tag/removeBlogTag/${item.id}`).then((response) => {
       if (response.data === true) {
-        setAssets(assets.filter((x) => x.id !== id));
+        setTontentTags((tmp) => tmp.filter((x) => x.id !== item.id));
       }
     });
   };
 
+  const insertTag = () => {
+    if (
+      tagTitle.trim().length > 0 &&
+      tags.some((x) => x.title === tagTitle) === false
+    ) {
+      axios
+      .post(`/api/Admin/tag/inset`, {
+        title: tagTitle
+      })
+      .then((response) => {
+        if (response.data && response.data.id > 0) {
+          setTags((tmp) => [...tmp, response.data]);
+          AddTagToContent(response.data);
+          setTagTitle("");
+        }
+      });
+    }
+  };
+
   return (
-    <form>
+    <div>
       <div className="modal-header">
-        <h2>Gallery</h2>
+        <h2>Tags</h2>
         <button type="button" onClick={() => closeModal("")}>
           <i className="fa fa-xmark" />
         </button>
       </div>
 
-      <div className="modal-content">
-        <div className="controller">
-          <label>Type</label>
-          <Select
-            className="drpImageType"
-            placeholder="Select Image Type"
-            classNamePrefix="select"
-            isClearable
-            onChange={(option) => {
-              return setValues((x) => ({ ...x, assetType: option.value }));
-            }}
-            options={[
-              {
-                label: "Gallery Show 400 * 400 px",
-                value: "Gallery",
-              },
-              {
-                label: "Slide Show 1200 * 400 px",
-                value: "Slide",
-              },
-            ]}
-          />
+      <div className="modal-content tag-content">
+        <div className="tag-content-item tags">
+          <div className="controller">
+            <input
+              placeholder="Search or Insert a Tag title"
+              type="text"
+              value={tagTitle}
+              onChange={(event) => setTagTitle(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && tagTitle.length > 0) {
+                  insertTag();
+                }
+              }}
+            />
+            {tagTitle.length > 0 && (
+              <i className="fa fa-xmark" onClick={() => setTagTitle("")}></i>
+            )}
+            {tagTitle.length > 0 && (
+              <i className="fa fa-plus" onClick={insertTag}></i>
+            )}
+          </div>
+          <div className="items">
+            {tags
+              .filter((x) => x.title.includes(tagTitle))
+              .map((item, key) => (
+                <span
+                  className={
+                    contentTags.some((x) => x.tagId === item.id) ? "deActive" : ""
+                  }
+                  key={key}
+                  onDoubleClick={() => AddTagToContent(item)}
+                >
+                  {item.title}
+                  {contentTags.some((x) => x.tagId === item.id) === false && (
+                    <i
+                      className="fa fa-plus"
+                      onClick={() => AddTagToContent(item)}
+                    />
+                  )}
+                </span>
+              ))}
+          </div>
         </div>
-        <div className="controller">
-          <label>Image</label>
-          <input
-            type="file"
-            name="imageFile"
-            accept="image/*"
-            id="imageFile"
-            onChange={showPreview}
-          />
+        <div className="tag-content-item selectedTag">
+          <div className="items">
+            {contentTags.map((item, key) => (
+              <span key={key} onDoubleClick={() => removeTagFromContent(item)}>
+                {item.title}
+                <i
+                  className="fa fa-trash"
+                  onClick={() => removeTagFromContent(item)}
+                />
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="controller">
-          <label>Preview</label>
-          {values.imageSrc && values.imageSrc !== "" && (
-            <img src={values.imageSrc} className="card-img" alt="Preview" />
-          )}
-        </div>
-
-        {assets &&
-          assets.length > 0 &&
-          assets.map((item, key) => (
-            <div className="galleries">
-              <img alt={item.id} src={item.fileName} />
-              <div className="tools">
-                <button type="button" onClick={() => removeAsset(item.id)}>
-                  <i className="fa fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          ))}
       </div>
-
-      <div className="modal-footer">
-        <button type="button" className="btn btn-light" onClick={handleSubmit}>
-          Submit
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
