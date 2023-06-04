@@ -17,7 +17,7 @@ const RoleModal = ({ userId, closeModal, setUsers }) => {
 
   const userRoleAddorRemove = (userId, roleId) => {
     axios
-      .get(`/api/Admin/addOrRemoveUserRole/${userId}/${roleId}`)
+      .get(`/api/Admin/users/addOrRemoveUserRole/${userId}/${roleId}`)
       .then((response) => {
         if (response) {
           const _roles = user.roles.find((x) => x.id === roleId)

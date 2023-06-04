@@ -16,7 +16,11 @@ const ModifyModal = ({ userId, closeModal, setUsers }) => {
 
   const submitModify = () => {
     axios
-      .post("/api/Admin/UpdateUser", { id: user.id, name: name, email: email })
+      .post("/api/Admin/users/UpdateUser", {
+        id: user.id,
+        name: name,
+        email: email,
+      })
       .then((response) => {
         if (response) {
           setUsers((prev) =>
@@ -28,10 +32,20 @@ const ModifyModal = ({ userId, closeModal, setUsers }) => {
       });
   };
 
+  const submitInser = () => {
+    axios
+      .post("/api/Admin/users/InsertUser", { name: name, email: email })
+      .then((response) => {
+        if (response) {
+          setUsers((prev) => [...prev, response.data]);
+        }
+      });
+  };
+
   return (
     <>
       <div className="modal-header">
-        <h2>{user.name} - Modify User</h2>
+        {userId ? <h2>{user.name} - Modify User</h2> : <h2>New User</h2>}
         <button type="button" onClick={() => closeModal("")}>
           <i className="fa fa-xmark" />
         </button>
@@ -55,7 +69,10 @@ const ModifyModal = ({ userId, closeModal, setUsers }) => {
         </div>
       </div>
       <div className="modal-footer">
-        <button className="submit" onClick={submitModify}>
+        <button
+          className="submit"
+          onClick={userId ? submitModify : submitInser}
+        >
           Submit
         </button>
       </div>
