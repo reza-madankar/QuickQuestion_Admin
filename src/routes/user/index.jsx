@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "utilities/axios";
 import Modal from "component/modal";
+
+import ProfileImage from "./components/profileImage";
 import RoleModal from "./components/roleModal";
 import ModifyModal from "./components/modifyModal";
 
@@ -34,7 +36,7 @@ const User = () => {
   };
 
   const changeActive = (id) => {
-    axios.get(`/api/Admin/changeUserActive/${id}`).then((response) => {
+    axios.get(`/api/Admin/users/changeUserActive/${id}`).then((response) => {
       if (response.data === true) {
         setUsers((prev) =>
           prev.map((x) => (x.id === id ? { ...x, active: !x.active } : x))
@@ -44,7 +46,7 @@ const User = () => {
   };
 
   const changeSubscribe = (id) => {
-    axios.get(`/api/Admin/changeUserSubscribe/${id}`).then((response) => {
+    axios.get(`/api/Admin/users/changeUserSubscribe/${id}`).then((response) => {
       if (response.data === true) {
         setUsers((prev) =>
           prev.map((x) => (x.id === id ? { ...x, subscribe: !x.subscribe } : x))
@@ -54,7 +56,7 @@ const User = () => {
   };
 
   const resetPassword = (id) => {
-    axios.get(`/api/Admin/userResetPassword/${id}`).then((response) => {});
+    axios.get(`/api/Admin/users/ResetPassword/${id}`).then((response) => {});
   };
 
   return (
@@ -88,7 +90,11 @@ const User = () => {
               label: title,
             }))}
           />
-          <button type="button" className="create">
+          <button
+            type="button"
+            className="create"
+            onClick={() => showModal(0, "New User")}
+          >
             New
           </button>
         </div>
@@ -111,13 +117,18 @@ const User = () => {
                 <span>3m</span>
               </p>
             </div>
-            <img src={Boy} alt="reza madankar" />
+            <img
+              src={Boy}
+              alt="reza madankar"
+              onClick={() => showModal(item.id, "Profile Image")}
+            />
             <h2>{item.name}</h2>
             <p>
               <i className="fa fa-envelope"></i> {item.email}
             </p>
             <p>
-              <i className="fa fa-users"></i> {item.roles?.map(u => u.title).join(', ')}
+              <i className="fa fa-users"></i>{" "}
+              {item.roles?.map((u) => u.title).join(", ")}
             </p>
 
             <hr />
@@ -167,11 +178,37 @@ const User = () => {
         </div>
       </div>
       <Modal isOpen={modal !== ""}>
-        {modal === "User Modify" ? (
-          <ModifyModal userId={userId} closeModal={setModal} setUsers={setUsers} />
-        ) : (
-          <RoleModal userId={userId} closeModal={setModal} setUsers={setUsers}  />
-        )}
+        {(() => {
+          switch (modal) {
+            case "New User":
+              return (
+                <ModifyModal
+                  closeModal={setModal}
+                  setUsers={setUsers}
+                />
+              );
+            case "User Modify":
+              return (
+                <ModifyModal
+                  userId={userId}
+                  closeModal={setModal}
+                  setUsers={setUsers}
+                />
+              );
+            case "Roles":
+              return (
+                <RoleModal
+                  userId={userId}
+                  closeModal={setModal}
+                  setUsers={setUsers}
+                />
+              );
+            case "Profile Image":
+              return <ProfileImage closeModal={setModal} userId={userId} />;
+            default:
+              return null;
+          }
+        })()}
       </Modal>
     </div>
   );
