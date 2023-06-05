@@ -14,6 +14,24 @@ const Question = () => {
     });
   }, []);
 
+  const removeComment = (id) => {
+    axios.delete(`/api/Admin/comment/remove/${id}`).then((response) => {
+      if (response.data === true) {
+        setQuestions((prev) => prev.filter((x) => x.id !== id));
+      }
+    });
+  };
+
+  const visibleComment = (id) => {
+    axios.get(`/api/Admin/comment/changeVisible/${id}`).then((response) => {
+      if (response.data === true) {
+        setQuestions((prev) =>
+          prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+        );
+      }
+    });
+  };
+
   return (
     <div className="question">
       <div className="content-header">
@@ -38,7 +56,7 @@ const Question = () => {
         </div>
       </div>
       <div className="items">
-        {questions.map((item, key) => 
+        {questions.map((item, key) => (
           <div className="item" key={key}>
             <img src={Girl} alt="reza madankar" />
             <div className="comment">
@@ -49,18 +67,22 @@ const Question = () => {
               <button type="button">
                 <i className="fa fa-pencil" />
               </button>
-              <button type="button">
-                <i className="fa fa-eye" />
+              <button type="button" onClick={() => visibleComment(item.id)}>
+                {item.visible === true ? (
+                  <i className="fa fa-eye" />
+                ) : (
+                  <i className="fa fa-eye-slash" />
+                )}
               </button>
               <button type="button">
                 <i className="fa fa-comment-dots" />
               </button>
-              <button type="button">
+              <button type="button" onClick={() => removeComment(item.id)}>
                 <i className="fa fa-trash" />
               </button>
             </div>
           </div>
-        )}
+        ))}
       </div>
       <div className="content-footer">
         <div className="pagination">
