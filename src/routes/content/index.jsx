@@ -20,7 +20,7 @@ const Content = () => {
   const [modal, setModal] = useState("");
 
   useEffect(() => {
-    axios.get("/api/Admin/categories/13").then((response) => {
+    axios.get("/api/Admin/category/getAll/13").then((response) => {
       setDrpCategory(
         response.data
           .sort((a, b) => a.title.localeCompare(b.title))

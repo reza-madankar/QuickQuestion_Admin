@@ -4,32 +4,32 @@ import { toast } from "react-hot-toast";
 
 import "asset/styles/tags.scss";
 
-const Tags = ({ blogId, closeModal }) => {
+const Tags = ({ commentId, closeModal }) => {
   const [tagTitle, setTagTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [contentTags, setTontentTags] = useState([]);
 
   useEffect(() => {
-    if (blogId > 0) {
+    if (commentId > 0) {
       axios.get(`/api/Admin/tag/getAll`).then((response) => {
         if (response.data && response.data.length > 0) {
           setTags(response.data);
         }
       });
 
-      axios.get(`/api/Admin/tag/getBlogTagsAll/${blogId}`).then((response) => {
+      axios.get(`/api/Admin/tag/getCommentTagsAll/${commentId}`).then((response) => {
         if (response.data && response.data.length > 0) {
           setTontentTags(response.data);
         }
       });
     }
-  }, [blogId]);
+  }, [commentId]);
 
   const AddTagToContent = (item) => {
     if (contentTags.some((x) => x.tagId === item.tagId) === false) {
       axios
-        .post(`/api/Admin/tag/insetBlogTag`, {
-          blogId: blogId,
+        .post(`/api/Admin/tag/insetCommentTag`, {
+          commentId: commentId,
           tagId: item.id,
         })
         .then((response) => {
@@ -38,7 +38,7 @@ const Tags = ({ blogId, closeModal }) => {
               id: response.data.id,
               title: item.title,
               tagId: item.id,
-              blogId: blogId
+              commentId: commentId
             }]);
           }
         });
@@ -46,7 +46,7 @@ const Tags = ({ blogId, closeModal }) => {
   };
 
   const removeTagFromContent = (item) => {
-    axios.delete(`/api/Admin/tag/removeBlogTag/${item.id}`).then((response) => {
+    axios.delete(`/api/Admin/tag/removeCommentTag/${item.id}`).then((response) => {
       if (response.data === true) {
         setTontentTags((tmp) => tmp.filter((x) => x.id !== item.id));
       }
@@ -83,7 +83,7 @@ const Tags = ({ blogId, closeModal }) => {
 
       <div className="modal-content tag-content">
         <div className="tag-content-item tags">
-          <div className="controller">
+          <div className="controller tag-controllet">
             <input
               placeholder="Search or Insert a Tag title"
               type="text"
