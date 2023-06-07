@@ -1,18 +1,43 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import Modal from "component/modal";
 
+import Tags from "./components/tagModal";
+import ModifyModal from "./components/modifyModal";
+import AnswerModal from "./components/answerModal";
+import GalleryModal from "./components/gallery";
 import "../../asset/styles/question.scss";
 
 import Girl from "asset/images/girl.png";
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
+  const [questionId, setQuestionId] = useState(0);
+  const [modal, setModal] = useState("");
 
   useEffect(() => {
     axios.get("/api/Admin/comment").then((response) => {
       setQuestions(response.data);
     });
   }, []);
+
+  const removeComment = (id) => {
+    axios.delete(`/api/Admin/comment/remove/${id}`).then((response) => {
+      if (response.data === true) {
+        setQuestions((prev) => prev.filter((x) => x.id !== id));
+      }
+    });
+  };
+
+  const visibleComment = (id) => {
+    axios.get(`/api/Admin/comment/changeVisible/${id}`).then((response) => {
+      if (response.data === true) {
+        setQuestions((prev) =>
+          prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+        );
+      }
+    });
+  };
 
   return (
     <div className="question">
@@ -32,13 +57,20 @@ const Question = () => {
           <i className="fa fa-search"></i>
         </div>
         <div className="right-tools">
-          <button type="button" className="create">
+          <button
+            type="button"
+            className="create"
+            onClick={() => {
+              setModal("New Or Modify Question");
+              setQuestionId(0);
+            }}
+          >
             New
           </button>
         </div>
       </div>
       <div className="items">
-        {questions.map((item, key) => 
+        {questions.map((item, key) => (
           <div className="item" key={key}>
             <img src={Girl} alt="reza madankar" />
             <div className="comment">
@@ -46,21 +78,55 @@ const Question = () => {
               <p>{item.description}</p>
             </div>
             <div className="tools">
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Gallery");
+                  setQuestionId(item.id);
+                }}
+              >
+                <i className="fa fa-images"></i>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Tag");
+                  setQuestionId(item.id);
+                }}
+              >
+                <i className="fa fa-tags"></i>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("New Or Modify Question");
+                  setQuestionId(item.id);
+                }}
+              >
                 <i className="fa fa-pencil" />
               </button>
-              <button type="button">
-                <i className="fa fa-eye" />
+              <button type="button" onClick={() => visibleComment(item.id)}>
+                {item.visible === true ? (
+                  <i className="fa fa-eye" />
+                ) : (
+                  <i className="fa fa-eye-slash" />
+                )}
               </button>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Answer");
+                  setQuestionId(item.id);
+                }}
+              >
                 <i className="fa fa-comment-dots" />
               </button>
-              <button type="button">
+              <button type="button" onClick={() => removeComment(item.id)}>
                 <i className="fa fa-trash" />
               </button>
             </div>
           </div>
-        )}
+        ))}
       </div>
       <div className="content-footer">
         <div className="pagination">
@@ -76,6 +142,30 @@ const Question = () => {
           <a href="#">&raquo;</a>
         </div>
       </div>
+      <Modal isOpen={modal !== ""}>
+        {(() => {
+          switch (modal) {
+            case "New Or Modify Question":
+              return (
+                <ModifyModal
+                  closeModal={setModal}
+                  id={questionId}
+                  setComments={setQuestions}
+                />
+              );
+            case "Tag":
+              return <Tags closeModal={setModal} commentId={questionId} />;
+            case "Answer":
+              return (
+                <AnswerModal closeModal={setModal} commentId={questionId} />
+              );
+            case "Gallery":
+              return <GalleryModal closeModal={setModal} commentId={questionId} />;
+            default:
+              return null;
+          }
+        })()}
+      </Modal>
     </div>
   );
 };
