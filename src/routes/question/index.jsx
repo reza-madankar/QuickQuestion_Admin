@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import axios from "utilities/axios";
 import Modal from "component/modal";
 
@@ -14,9 +15,10 @@ const Question = () => {
   const [questions, setQuestions] = useState([]);
   const [questionId, setQuestionId] = useState(0);
   const [modal, setModal] = useState("");
+  const { blogId } = useParams();
 
   useEffect(() => {
-    axios.get("/api/Admin/comment").then((response) => {
+    axios.get(`/api/Admin/comment/${blogId}/0`).then((response) => {
       setQuestions(response.data);
     });
   }, []);

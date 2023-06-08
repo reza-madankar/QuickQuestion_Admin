@@ -54,7 +54,7 @@ const root = (
             }
           />
           <Route
-            path="/question/:id"
+            path="/question/:blogId"
             element={
               <Authentication>
                 <Question />
