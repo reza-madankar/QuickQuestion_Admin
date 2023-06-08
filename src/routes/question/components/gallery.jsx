@@ -10,6 +10,7 @@ const Gallery = ({ commentId, closeModal }) => {
     assetId: "",
     imageFile: null,
     assetType: null,
+    assetTypeId: null,
     imageSrc: "",
   });
 
@@ -43,6 +44,7 @@ const Gallery = ({ commentId, closeModal }) => {
           ...oldArray,
           {
             assetType: response.data.assetType,
+            assetTypeId: values.assetTypeId,
             commentId: response.data.commentId,
             fileNmae: response.data.fileName,
             id: response.data.id,
@@ -50,15 +52,15 @@ const Gallery = ({ commentId, closeModal }) => {
         ]);
 
         setValues({
-            commentId: commentId,
+          commentId: commentId,
           assetId: "",
           imageFile: null,
           assetType: null,
+          assetTypeId: null,
           imageSrc: "",
         });
 
         document.getElementById("imageFile").value = "";
-
       } catch (error) {
         console.error(error);
       }
@@ -115,16 +117,22 @@ const Gallery = ({ commentId, closeModal }) => {
             classNamePrefix="select"
             isClearable
             onChange={(option) => {
-              return setValues((x) => ({ ...x, assetType: option.value }));
+              return setValues((x) => ({
+                ...x,
+                assetType: option === null ? null : option.value,
+                assetTypeId: option === null ? null : option.id,
+              }));
             }}
             options={[
               {
                 label: "Gallery Show 400 * 400 px",
                 value: "Gallery",
+                id: 1,
               },
               {
                 label: "Slide Show 1200 * 400 px",
                 value: "Slide",
+                id: 1,
               },
             ]}
           />
@@ -148,16 +156,22 @@ const Gallery = ({ commentId, closeModal }) => {
 
         {assets &&
           assets.length > 0 &&
-          assets.map((item, key) => (
-            <div className="galleries">
-              <img alt={item.id} src={item.fileName} />
-              <div className="tools">
-                <button type="button" onClick={() => removeAsset(item.id)}>
-                  <i className="fa fa-trash"></i>
-                </button>
+          assets
+            .filter((x) =>
+              values.assetTypeId !== null
+                ? x.assetType === values.assetTypeId
+                : true
+            )
+            .map((item, key) => (
+              <div className="galleries">
+                <img alt={item.id} src={item.fileName} />
+                <div className="tools">
+                  <button type="button" onClick={() => removeAsset(item.id)}>
+                    <i className="fa fa-trash"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
 
       <div className="modal-footer">

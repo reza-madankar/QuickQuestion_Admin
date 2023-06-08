@@ -10,18 +10,17 @@ const Gallery = ({ blogId, closeModal }) => {
     assetId: "",
     imageFile: null,
     assetType: null,
+    assetTypeId: null,
     imageSrc: "",
   });
 
   useEffect(() => {
     if (blogId > 0) {
-      axios
-        .get(`/api/Admin/blog/getAllAssets/${blogId}`)
-        .then((response) => {
-          if (response.data && response.data.length > 0) {
-            setAssets(response.data.filter((x) => x.assetType !== 0));
-          }
-        });
+      axios.get(`/api/Admin/blog/getAllAssets/${blogId}`).then((response) => {
+        if (response.data && response.data.length > 0) {
+          setAssets(response.data.filter((x) => x.assetType !== 0));
+        }
+      });
     }
   }, [blogId]);
 
@@ -43,6 +42,7 @@ const Gallery = ({ blogId, closeModal }) => {
           ...oldArray,
           {
             assetType: response.data.assetType,
+            assetTypeId: values.assetTypeId,
             blogId: response.data.blogId,
             fileNmae: response.data.fileName,
             id: response.data.id,
@@ -54,11 +54,11 @@ const Gallery = ({ blogId, closeModal }) => {
           assetId: "",
           imageFile: null,
           assetType: null,
+          assetTypeId: null,
           imageSrc: "",
         });
 
         document.getElementById("imageFile").value = "";
-
       } catch (error) {
         console.error(error);
       }
@@ -115,16 +115,22 @@ const Gallery = ({ blogId, closeModal }) => {
             classNamePrefix="select"
             isClearable
             onChange={(option) => {
-              return setValues((x) => ({ ...x, assetType: option.value }));
+              return setValues((x) => ({
+                ...x,
+                assetType: option === null ? null : option.value,
+                assetTypeId: option === null ? null : option.id,
+              }));
             }}
             options={[
               {
                 label: "Gallery Show 400 * 400 px",
                 value: "Gallery",
+                id: 1,
               },
               {
                 label: "Slide Show 1200 * 400 px",
                 value: "Slide",
+                id: 2,
               },
             ]}
           />
@@ -148,16 +154,22 @@ const Gallery = ({ blogId, closeModal }) => {
 
         {assets &&
           assets.length > 0 &&
-          assets.map((item, key) => (
-            <div className="galleries">
-              <img alt={item.id} src={item.fileName} />
-              <div className="tools">
-                <button type="button" onClick={() => removeAsset(item.id)}>
-                  <i className="fa fa-trash"></i>
-                </button>
+          assets
+            .filter((x) =>
+              values.assetTypeId !== null
+                ? x.assetType === values.assetTypeId
+                : true
+            )
+            .map((item, key) => (
+              <div className="galleries" key={key}>
+                <img alt={item.id} src={item.fileName} />
+                <div className="tools">
+                  <button type="button" onClick={() => removeAsset(item.id)}>
+                    <i className="fa fa-trash"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
 
       <div className="modal-footer">
