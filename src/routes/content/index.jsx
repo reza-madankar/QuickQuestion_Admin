@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import axios from "utilities/axios";
 import Select from "react-select";
 import Modal from "component/modal";
+import { toast } from "react-hot-toast";
 
 import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
@@ -43,23 +44,47 @@ const Content = () => {
   }, [categoryId]);
 
   const removeContent = (id) => {
-    axios.delete(`/api/Admin/blog/remove/${id}`).then((response) => {
-      if (response.data === true) {
-        setContents(contents.filter((x) => x.id !== id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/blog/remove/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setContents(contents.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const changeAcceptComment = (id) => {
-    axios.get(`/api/Admin/blog/acceptComment/${id}`).then((response) => {
-      if (response.data === true) {
-        setContents((prev) =>
-          prev.map((x) =>
-            x.id === id ? { ...x, acceptComment: !x.acceptComment } : x
-          )
+    axios
+      .get(`/api/Admin/blog/acceptComment/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setContents((prev) =>
+            prev.map((x) =>
+              x.id === id ? { ...x, acceptComment: !x.acceptComment } : x
+            )
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
         );
-      }
-    });
+      });
   };
 
   const changeVisible = (id) => {
@@ -68,7 +93,17 @@ const Content = () => {
         setContents((prev) =>
           prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
         );
+        toast.success("Updated Successfully!");
+      } else {
+        toast.error(
+          "Server has rejected this request, please tell to developer."
+        );
       }
+    })
+    .catch(() => {
+      toast.error(
+        "Please try it again, if it didn't work for second time, refresh page and try it again."
+      );
     });
   };
 

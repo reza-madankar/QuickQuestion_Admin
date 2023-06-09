@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const RoleModal = ({ userId, closeModal, setUsers }) => {
   const [roles, setRoles] = useState([]);
@@ -32,15 +33,25 @@ const RoleModal = ({ userId, closeModal, setUsers }) => {
 
           setUser((prev) => ({
             ...prev,
-            roles: _roles
+            roles: _roles,
           }));
 
           setUsers((prev) =>
-            prev.map((x) =>
-              x.id === user.id ? { ...x, roles: _roles } : x
-            )
+            prev.map((x) => (x.id === user.id ? { ...x, roles: _roles } : x))
+          );
+          toast.success(
+            roleId > 0 ? "Removed Successfully!" : "Inserted Successfully!"
+          );
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
           );
         }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
       });
   };
 

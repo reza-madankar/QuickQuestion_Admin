@@ -32,36 +32,35 @@ const Gallery = ({ blogId, closeModal }) => {
       formData.append("assetType", values.assetType);
       formData.append("blogId", blogId);
 
-      try {
-        const response = await axios.post(
-          "/api/Admin/blog/insertasset",
-          formData
-        );
+      const response = await axios
+        .post("/api/Admin/blog/insertasset", formData)
+        .then((response) => {
+          setAssets((oldArray) => [
+            ...oldArray,
+            {
+              assetType: response.data.assetType,
+              assetTypeId: values.assetTypeId,
+              blogId: response.data.blogId,
+              fileNmae: response.data.fileName,
+              id: response.data.id,
+            },
+          ]);
 
-        setAssets((oldArray) => [
-          ...oldArray,
-          {
-            assetType: response.data.assetType,
-            assetTypeId: values.assetTypeId,
-            blogId: response.data.blogId,
-            fileNmae: response.data.fileName,
-            id: response.data.id,
-          },
-        ]);
-
-        setValues({
-          blogId: blogId,
-          assetId: "",
-          imageFile: null,
-          assetType: null,
-          assetTypeId: null,
-          imageSrc: "",
+          setValues({
+            blogId: blogId,
+            assetId: "",
+            imageFile: null,
+            assetType: null,
+            assetTypeId: null,
+            imageSrc: "",
+          });
+          toast.success("Inserted Successfully!");
+        })
+        .catch((error) => {
+          toast.error(
+            "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+          );
         });
-
-        document.getElementById("imageFile").value = "";
-      } catch (error) {
-        console.error(error);
-      }
     } else {
       toast.error("Please Select image type.");
     }
@@ -90,11 +89,23 @@ const Gallery = ({ blogId, closeModal }) => {
   };
 
   const removeAsset = (id) => {
-    axios.delete(`/api/Admin/blog/removeAsset/${id}`).then((response) => {
-      if (response.data === true) {
-        setAssets(assets.filter((x) => x.id !== id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/blog/removeAsset/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setAssets(assets.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          "An eeror issued on backend, please try again, if it didn't work for second time please refresh page and try again."
+        );
+      });
   };
 
   return (

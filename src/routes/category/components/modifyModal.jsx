@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "utilities/axios";
 import Select from "react-select";
+import { toast } from "react-hot-toast";
 
 const ModifyModal = ({ id = 0, closeModal, setCategories }) => {
   const [drpCategory, setDrpCategory] = useState([]);
@@ -61,7 +62,19 @@ const ModifyModal = ({ id = 0, closeModal, setCategories }) => {
             }
           });
           closeModal("");
+          toast.success(
+            categoryId > 0 ? "Updated Successfully!" : "Inserted Successfully!"
+          );
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
         }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
       });
   };
 

@@ -34,23 +34,48 @@ const Tags = ({ blogId, closeModal }) => {
         })
         .then((response) => {
           if (response.data && response.data.id > 0) {
-            setTontentTags((old) => [...old, {
-              id: response.data.id,
-              title: item.title,
-              tagId: item.id,
-              blogId: blogId
-            }]);
+            setTontentTags((old) => [
+              ...old,
+              {
+                id: response.data.id,
+                title: item.title,
+                tagId: item.id,
+                blogId: blogId,
+              },
+            ]);
+            toast.success("Inserted Successfully!");
+          } else {
+            toast.error(
+              "Server has rejected this request, please tell to developer."
+            );
           }
+        })
+        .catch(() => {
+          toast.error(
+            "Please try it again, if it didn't work for second time, refresh page and try it again."
+          );
         });
     }
   };
 
   const removeTagFromContent = (item) => {
-    axios.delete(`/api/Admin/tag/removeBlogTag/${item.id}`).then((response) => {
-      if (response.data === true) {
-        setTontentTags((tmp) => tmp.filter((x) => x.id !== item.id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/tag/removeBlogTag/${item.id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setTontentTags((tmp) => tmp.filter((x) => x.id !== item.id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const insertTag = () => {
@@ -59,16 +84,26 @@ const Tags = ({ blogId, closeModal }) => {
       tags.some((x) => x.title === tagTitle) === false
     ) {
       axios
-      .post(`/api/Admin/tag/inset`, {
-        title: tagTitle
-      })
-      .then((response) => {
-        if (response.data && response.data.id > 0) {
-          setTags((tmp) => [...tmp, response.data]);
-          AddTagToContent(response.data);
-          setTagTitle("");
-        }
-      });
+        .post(`/api/Admin/tag/inset`, {
+          title: tagTitle,
+        })
+        .then((response) => {
+          if (response.data && response.data.id > 0) {
+            setTags((tmp) => [...tmp, response.data]);
+            AddTagToContent(response.data);
+            setTagTitle("");
+            toast.success("Inserted Successfully!");
+          } else {
+            toast.error(
+              "Server has rejected this request, please tell to developer."
+            );
+          }
+        })
+        .catch(() => {
+          toast.error(
+            "Please try it again, if it didn't work for second time, refresh page and try it again."
+          );
+        });
     }
   };
 
@@ -108,7 +143,9 @@ const Tags = ({ blogId, closeModal }) => {
               .map((item, key) => (
                 <span
                   className={
-                    contentTags.some((x) => x.tagId === item.id) ? "deActive" : ""
+                    contentTags.some((x) => x.tagId === item.id)
+                      ? "deActive"
+                      : ""
                   }
                   key={key}
                   onDoubleClick={() => AddTagToContent(item)}
