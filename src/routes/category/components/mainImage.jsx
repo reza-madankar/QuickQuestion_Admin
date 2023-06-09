@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const MainImage = ({ categoryId, closeModal }) => {
   const [category, setCategory] = useState({});
@@ -30,15 +31,16 @@ const MainImage = ({ categoryId, closeModal }) => {
     formData.append("assetType", values.assetType);
     formData.append("categoryId", categoryId);
 
-    try {
-      const response = await axios.post(
-        "/api/Admin/category/mainimage",
-        formData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    await axios
+      .post("/api/Admin/category/mainimage", formData)
+      .then(() => {
+        toast.success("Inserted Successfully!");
+      })
+      .catch((error) => {
+        toast.error(
+          "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const showPreview = (e) => {

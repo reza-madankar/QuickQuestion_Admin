@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const MainImage = ({ blogId, closeModal }) => {
   const [blog, setBlog] = useState({});
@@ -18,7 +19,17 @@ const MainImage = ({ blogId, closeModal }) => {
         .then((response) => {
           if (response.data && response.data.length > 0) {
             setBlog(response.data.filter((x) => x.assetType === 0)[0]);
+            toast.success("Inserted Successfully!");
+          } else {
+            toast.error(
+              "Server has rejected this request, please tell to developer."
+            );
           }
+        })
+        .catch((error) => {
+          toast.error(
+            "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+          );
         });
     }
   }, [blogId]);
@@ -30,15 +41,16 @@ const MainImage = ({ blogId, closeModal }) => {
     formData.append("assetType", values.assetType);
     formData.append("blogId", blogId);
 
-    try {
-      const response = await axios.post(
-        "/api/Admin/blog/mainimage",
-        formData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    await axios
+      .post("/api/Admin/blog/mainimage", formData)
+      .then(() => {
+        toast.success("Inserted Successfully!");
+      })
+      .catch((error) => {
+        toast.error(
+          "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const showPreview = (e) => {
@@ -84,8 +96,7 @@ const MainImage = ({ blogId, closeModal }) => {
         </div>
         <div className="controller">
           <label>Preview</label>
-          {((values.imageSrc && values.imageSrc !== "") ||
-            blog?.fileNmae) && (
+          {((values.imageSrc && values.imageSrc !== "") || blog?.fileNmae) && (
             <img
               src={values.imageSrc || blog.fileNmae}
               className="card-img"

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "utilities/axios";
 import Modal from "component/modal";
+import { toast } from "react-hot-toast";
 
 import Tags from "./components/tagModal";
 import ModifyModal from "./components/modifyModal";
@@ -14,29 +16,54 @@ const Question = () => {
   const [questions, setQuestions] = useState([]);
   const [questionId, setQuestionId] = useState(0);
   const [modal, setModal] = useState("");
+  const { blogId } = useParams();
 
   useEffect(() => {
-    axios.get("/api/Admin/comment").then((response) => {
+    axios.get(`/api/Admin/comment/${blogId}/0`).then((response) => {
       setQuestions(response.data);
     });
   }, []);
 
   const removeComment = (id) => {
-    axios.delete(`/api/Admin/comment/remove/${id}`).then((response) => {
-      if (response.data === true) {
-        setQuestions((prev) => prev.filter((x) => x.id !== id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/comment/remove/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setQuestions((prev) => prev.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const visibleComment = (id) => {
-    axios.get(`/api/Admin/comment/changeVisible/${id}`).then((response) => {
-      if (response.data === true) {
-        setQuestions((prev) =>
-          prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+    axios
+      .get(`/api/Admin/comment/changeVisible/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setQuestions((prev) =>
+            prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
         );
-      }
-    });
+      });
   };
 
   return (
@@ -160,7 +187,9 @@ const Question = () => {
                 <AnswerModal closeModal={setModal} commentId={questionId} />
               );
             case "Gallery":
-              return <GalleryModal closeModal={setModal} commentId={questionId} />;
+              return (
+                <GalleryModal closeModal={setModal} commentId={questionId} />
+              );
             default:
               return null;
           }

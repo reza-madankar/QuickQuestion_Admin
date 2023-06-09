@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import axios from "utilities/axios";
 import Select from "react-select";
 import Modal from "component/modal";
+import { toast } from "react-hot-toast";
 
 import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
@@ -42,10 +44,66 @@ const Content = () => {
   }, [categoryId]);
 
   const removeContent = (id) => {
-    axios.delete(`/api/Admin/blog/remove/${id}`).then((response) => {
+    axios
+      .delete(`/api/Admin/blog/remove/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setContents(contents.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
+  };
+
+  const changeAcceptComment = (id) => {
+    axios
+      .get(`/api/Admin/blog/acceptComment/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setContents((prev) =>
+            prev.map((x) =>
+              x.id === id ? { ...x, acceptComment: !x.acceptComment } : x
+            )
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
+  };
+
+  const changeVisible = (id) => {
+    axios.get(`/api/Admin/blog/visible/${id}`).then((response) => {
       if (response.data === true) {
-        setContents(contents.filter((x) => x.id !== id));
+        setContents((prev) =>
+          prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+        );
+        toast.success("Updated Successfully!");
+      } else {
+        toast.error(
+          "Server has rejected this request, please tell to developer."
+        );
       }
+    })
+    .catch(() => {
+      toast.error(
+        "Please try it again, if it didn't work for second time, refresh page and try it again."
+      );
     });
   };
 
@@ -104,6 +162,11 @@ const Content = () => {
             <p>{item.shortDescription}</p>
 
             <div className="tools">
+              <button type="button">
+                <NavLink to={`/question/${item.id}`} className="bbt-scanner">
+                  <i className="fa fa-comment"></i>
+                </NavLink>
+              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -130,6 +193,23 @@ const Content = () => {
                 }}
               >
                 <i className="fa fa-pencil"></i>
+              </button>
+              <button
+                type="button"
+                onClick={() => changeAcceptComment(item.id)}
+              >
+                {item.acceptComment === false ? (
+                  <i className="fa fa-lock-open" />
+                ) : (
+                  <i className="fa fa-lock" />
+                )}
+              </button>
+              <button type="button" onClick={() => changeVisible(item.id)}>
+                {item.visible === true ? (
+                  <i className="fa fa-eye" />
+                ) : (
+                  <i className="fa fa-eye-slash" />
+                )}
               </button>
               <button type="button" onClick={() => removeContent(item.id)}>
                 <i className="fa fa-trash"></i>

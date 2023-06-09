@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "utilities/axios";
 import Modal from "component/modal";
+import { toast } from "react-hot-toast";
 
 import ProfileImage from "./components/profileImage";
 import RoleModal from "./components/roleModal";
@@ -36,27 +37,62 @@ const User = () => {
   };
 
   const changeActive = (id) => {
-    axios.get(`/api/Admin/users/changeUserActive/${id}`).then((response) => {
-      if (response.data === true) {
-        setUsers((prev) =>
-          prev.map((x) => (x.id === id ? { ...x, active: !x.active } : x))
+    axios
+      .get(`/api/Admin/users/changeUserActive/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setUsers((prev) =>
+            prev.map((x) => (x.id === id ? { ...x, active: !x.active } : x))
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
         );
-      }
-    });
+      });
   };
 
   const changeSubscribe = (id) => {
-    axios.get(`/api/Admin/users/changeUserSubscribe/${id}`).then((response) => {
-      if (response.data === true) {
-        setUsers((prev) =>
-          prev.map((x) => (x.id === id ? { ...x, subscribe: !x.subscribe } : x))
+    axios
+      .get(`/api/Admin/users/changeUserSubscribe/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setUsers((prev) =>
+            prev.map((x) =>
+              x.id === id ? { ...x, subscribe: !x.subscribe } : x
+            )
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
         );
-      }
-    });
+      });
   };
 
   const resetPassword = (id) => {
-    axios.get(`/api/Admin/users/ResetPassword/${id}`).then((response) => {});
+    axios
+      .get(`/api/Admin/users/ResetPassword/${id}`)
+      .then(() => {
+        toast.success("Updated Successfully!");
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   return (
@@ -181,12 +217,7 @@ const User = () => {
         {(() => {
           switch (modal) {
             case "New User":
-              return (
-                <ModifyModal
-                  closeModal={setModal}
-                  setUsers={setUsers}
-                />
-              );
+              return <ModifyModal closeModal={setModal} setUsers={setUsers} />;
             case "User Modify":
               return (
                 <ModifyModal

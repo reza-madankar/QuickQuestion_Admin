@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const ModifyModal = ({ userId, closeModal, setUsers }) => {
   const [user, setUser] = useState({});
@@ -28,7 +29,17 @@ const ModifyModal = ({ userId, closeModal, setUsers }) => {
               x.id === user.id ? { ...x, name: name, email: email } : x
             )
           );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
         }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
       });
   };
 
@@ -38,7 +49,17 @@ const ModifyModal = ({ userId, closeModal, setUsers }) => {
       .then((response) => {
         if (response) {
           setUsers((prev) => [...prev, response.data]);
+          toast.success("Inserted Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
         }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
       });
   };
 

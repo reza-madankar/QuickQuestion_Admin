@@ -10,6 +10,7 @@ const Gallery = ({ commentId, closeModal }) => {
     assetId: "",
     imageFile: null,
     assetType: null,
+    assetTypeId: null,
     imageSrc: "",
   });
 
@@ -33,35 +34,37 @@ const Gallery = ({ commentId, closeModal }) => {
       formData.append("assetType", values.assetType);
       formData.append("commentId", commentId);
 
-      try {
-        const response = await axios.post(
-          "/api/Admin/comment/insertasset",
-          formData
-        );
+      await axios
+        .post("/api/Admin/comment/insertasset", formData)
+        .then((response) => {
+          setAssets((oldArray) => [
+            ...oldArray,
+            {
+              assetType: response.data.assetType,
+              assetTypeId: values.assetTypeId,
+              commentId: response.data.commentId,
+              fileNmae: response.data.fileName,
+              id: response.data.id,
+            },
+          ]);
 
-        setAssets((oldArray) => [
-          ...oldArray,
-          {
-            assetType: response.data.assetType,
-            commentId: response.data.commentId,
-            fileNmae: response.data.fileName,
-            id: response.data.id,
-          },
-        ]);
-
-        setValues({
+          setValues({
             commentId: commentId,
-          assetId: "",
-          imageFile: null,
-          assetType: null,
-          imageSrc: "",
+            assetId: "",
+            imageFile: null,
+            assetType: null,
+            assetTypeId: null,
+            imageSrc: "",
+          });
+
+          document.getElementById("imageFile").value = "";
+          toast.success("Inserted Successfully!");
+        })
+        .catch((error) => {
+          toast.error(
+            "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+          );
         });
-
-        document.getElementById("imageFile").value = "";
-
-      } catch (error) {
-        console.error(error);
-      }
     } else {
       toast.error("Please Select image type.");
     }
@@ -90,11 +93,23 @@ const Gallery = ({ commentId, closeModal }) => {
   };
 
   const removeAsset = (id) => {
-    axios.delete(`/api/Admin/comment/removeAsset/${id}`).then((response) => {
-      if (response.data === true) {
-        setAssets(assets.filter((x) => x.id !== id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/comment/removeAsset/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setAssets(assets.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          "An eeror issued on backend, please try again, if it didn't work for second time please refresh page and try again."
+        );
+      });
   };
 
   return (
@@ -115,16 +130,22 @@ const Gallery = ({ commentId, closeModal }) => {
             classNamePrefix="select"
             isClearable
             onChange={(option) => {
-              return setValues((x) => ({ ...x, assetType: option.value }));
+              return setValues((x) => ({
+                ...x,
+                assetType: option === null ? null : option.value,
+                assetTypeId: option === null ? null : option.id,
+              }));
             }}
             options={[
               {
                 label: "Gallery Show 400 * 400 px",
                 value: "Gallery",
+                id: 1,
               },
               {
                 label: "Slide Show 1200 * 400 px",
                 value: "Slide",
+                id: 1,
               },
             ]}
           />
@@ -148,16 +169,22 @@ const Gallery = ({ commentId, closeModal }) => {
 
         {assets &&
           assets.length > 0 &&
-          assets.map((item, key) => (
-            <div className="galleries">
-              <img alt={item.id} src={item.fileName} />
-              <div className="tools">
-                <button type="button" onClick={() => removeAsset(item.id)}>
-                  <i className="fa fa-trash"></i>
-                </button>
+          assets
+            .filter((x) =>
+              values.assetTypeId !== null
+                ? x.assetType === values.assetTypeId
+                : true
+            )
+            .map((item, key) => (
+              <div className="galleries">
+                <img alt={item.id} src={item.fileName} />
+                <div className="tools">
+                  <button type="button" onClick={() => removeAsset(item.id)}>
+                    <i className="fa fa-trash"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
 
       <div className="modal-footer">

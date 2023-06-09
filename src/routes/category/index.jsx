@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "utilities/axios";
 import Modal from "component/modal";
+import { toast } from "react-hot-toast";
 
 import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
@@ -39,7 +40,17 @@ const Category = () => {
     axios.delete(`/api/Admin/category/remove/${id}`).then((response) => {
       if (response.data === true) {
         getCategories(category);
+        toast.success("Removed Successfully!");
+      } else {
+        toast.error(
+          "Server has rejected this request, please tell to developer."
+        );
       }
+    })
+    .catch(() => {
+      toast.error(
+        "Please try it again, if it didn't work for second time, refresh page and try it again."
+      );
     });
   };
 

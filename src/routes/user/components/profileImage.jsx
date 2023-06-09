@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const ProfileImage = ({ userId, closeModal }) => {
   const [user, setUser] = useState({});
@@ -13,13 +14,11 @@ const ProfileImage = ({ userId, closeModal }) => {
 
   useEffect(() => {
     if (userId > 0) {
-      axios
-        .get(`/api/Admin/user/getAllAssets/${userId}`)
-        .then((response) => {
-          if (response.data && response.data.length > 0) {
-            setUser(response.data.filter((x) => x.assetType === 0)[0]);
-          }
-        });
+      axios.get(`/api/Admin/user/getAllAssets/${userId}`).then((response) => {
+        if (response.data && response.data.length > 0) {
+          setUser(response.data.filter((x) => x.assetType === 0)[0]);
+        }
+      });
     }
   }, [userId]);
 
@@ -30,13 +29,16 @@ const ProfileImage = ({ userId, closeModal }) => {
     formData.append("assetType", values.assetType);
     formData.append("userId", userId);
 
-    try {
-      const response = await axios.post(
-        "/api/Admin/user/profileimage",
-        formData
-      );
-    } catch (error) {
-    }
+    await axios
+      .post("/api/Admin/user/profileimage", formData)
+      .then(() => {
+        toast.success("Inserted Successfully!");
+      })
+      .catch((error) => {
+        toast.error(
+          "Check image size and Image type then try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const showPreview = (e) => {
@@ -82,8 +84,7 @@ const ProfileImage = ({ userId, closeModal }) => {
         </div>
         <div className="controller">
           <label>Preview</label>
-          {((values.imageSrc && values.imageSrc !== "") ||
-            user?.fileNmae) && (
+          {((values.imageSrc && values.imageSrc !== "") || user?.fileNmae) && (
             <img
               src={values.imageSrc || user.fileNmae}
               width={120}

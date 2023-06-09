@@ -16,6 +16,7 @@ const Login = () => {
   useEffect(() => {
     if (isUserAuthenticated() === true) {
       navigate("/");
+      window.location.reload();
     }
   }, []);
 
@@ -43,6 +44,7 @@ const Login = () => {
             });
 
             navigate("/");
+            window.location.reload();
           } else {
             toast.error(
               "Your account doesn't have permissions to access the Admin panel."

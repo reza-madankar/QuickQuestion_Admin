@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "utilities/axios";
+import { toast } from "react-hot-toast";
 
 const AnswerModal = ({ closeModal, commentId }) => {
   const [answers, setAnswers] = useState([]);
@@ -40,17 +41,39 @@ const AnswerModal = ({ closeModal, commentId }) => {
             });
 
             setDescription("");
+            toast.success("Inserted Successfully!");
+          } else {
+            toast.error(
+              "Server has rejected this request, please tell to developer."
+            );
           }
+        })
+        .catch(() => {
+          toast.error(
+            "Please try it again, if it didn't work for second time, refresh page and try it again."
+          );
         });
     }
   };
 
   const removeAnswer = (id) => {
-    axios.delete(`/api/Admin/comment/answer/remove/${id}`).then((response) => {
-      if (response.data === true) {
-        setAnswers((prev) => prev.filter((x) => x.id !== id));
-      }
-    });
+    axios
+      .delete(`/api/Admin/comment/answer/remove/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setAnswers((prev) => prev.filter((x) => x.id !== id));
+          toast.success("Removed Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
+      });
   };
 
   const visibleAnswer = (id) => {
@@ -61,7 +84,17 @@ const AnswerModal = ({ closeModal, commentId }) => {
           setAnswers((prev) =>
             prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
           );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
         }
+      })
+      .catch(() => {
+        toast.error(
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
+        );
       });
   };
 
