@@ -11,6 +11,7 @@ import User from "routes/user";
 import Content from "routes/content";
 import Category from "routes/category";
 import Question from "routes/question";
+import Tag from "routes/tag";
 import NotFound from "routes/notFound";
 
 import "react-tooltip/dist/react-tooltip.css";
@@ -58,6 +59,14 @@ const root = (
             element={
               <Authentication>
                 <Question />
+              </Authentication>
+            }
+          />
+          <Route
+            path="/tags"
+            element={
+              <Authentication>
+                <Tag />
               </Authentication>
             }
           />
