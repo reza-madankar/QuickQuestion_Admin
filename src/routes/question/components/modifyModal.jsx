@@ -87,7 +87,7 @@ const ModifyModal = ({ id = 0, closeModal, setComments }) => {
     <>
       <div className="modal-header">
         <h2>
-          {id === 0 ? " New Comment" : " Update Comment"} -- {blogId}
+          {id === 0 ? " New Comment" : " Update Comment"}
         </h2>
         <button type="button" onClick={() => closeModal("")}>
           <i className="fa fa-xmark" />
