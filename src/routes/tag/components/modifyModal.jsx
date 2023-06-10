@@ -47,7 +47,7 @@ const ModifyModal = ({ id = 0, closeModal, setTags }) => {
   };
 
   return (
-    <>
+    <div>
       <div className="modal-header">
         <h2>
           {id === 0 ? " New Tag" : " Update Tag"}
@@ -56,7 +56,7 @@ const ModifyModal = ({ id = 0, closeModal, setTags }) => {
           <i className="fa fa-xmark" />
         </button>
       </div>
-      <div className="modal-content modal-category-content">
+      <div className="modal-content modal-tag-content">
 
         <div className="controller">
           <label>Title</label>
@@ -74,7 +74,7 @@ const ModifyModal = ({ id = 0, closeModal, setTags }) => {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
