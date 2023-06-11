@@ -9,6 +9,8 @@ import Gallery from "./components/gallery";
 import MainImage from "./components/mainImage";
 import Tags from "./components/tags";
 import ModifyModal from "./components/modifyModal";
+import AuthorModal from "./components/authorModal";
+import AssistantModal from "./components/assistantModal";
 
 import "asset/styles/category.scss";
 
@@ -88,23 +90,25 @@ const Content = () => {
   };
 
   const changeVisible = (id) => {
-    axios.get(`/api/Admin/blog/visible/${id}`).then((response) => {
-      if (response.data === true) {
-        setContents((prev) =>
-          prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
-        );
-        toast.success("Updated Successfully!");
-      } else {
+    axios
+      .get(`/api/Admin/blog/visible/${id}`)
+      .then((response) => {
+        if (response.data === true) {
+          setContents((prev) =>
+            prev.map((x) => (x.id === id ? { ...x, visible: !x.visible } : x))
+          );
+          toast.success("Updated Successfully!");
+        } else {
+          toast.error(
+            "Server has rejected this request, please tell to developer."
+          );
+        }
+      })
+      .catch(() => {
         toast.error(
-          "Server has rejected this request, please tell to developer."
+          "Please try it again, if it didn't work for second time, refresh page and try it again."
         );
-      }
-    })
-    .catch(() => {
-      toast.error(
-        "Please try it again, if it didn't work for second time, refresh page and try it again."
-      );
-    });
+      });
   };
 
   return (
@@ -149,7 +153,7 @@ const Content = () => {
       </div>
       <div className="items">
         {contents.map((item, key) => (
-          <div className="item">
+          <div className="item" key={key}>
             <div
               className="logo"
               style={{ backgroundImage: "url(" + Boy + ")" }}
@@ -176,6 +180,26 @@ const Content = () => {
               >
                 <i className="fa fa-images"></i>
               </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Assistant");
+                  setContentId(item.id);
+                }}
+              >
+                <i className="fa fa-user-md"></i>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setModal("Author");
+                  setContentId(item.id);
+                }}
+              >
+                <i className="fa fa-clipboard-user"></i>
+              </button>
+
               <button
                 type="button"
                 onClick={() => {
@@ -249,6 +273,12 @@ const Content = () => {
               return <MainImage closeModal={setModal} blogId={contentId} />;
             case "Tag":
               return <Tags closeModal={setModal} blogId={contentId} />;
+            case "Author":
+              return <AuthorModal closeModal={setModal} blogId={contentId} />;
+            case "Assistant":
+              return (
+                <AssistantModal closeModal={setModal} blogId={contentId} />
+              );
             default:
               return null;
           }
