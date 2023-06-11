@@ -28,7 +28,7 @@ const ModifyModal = ({ id = 0, closeModal, setContents }) => {
   }, []);
 
   useEffect(() => {
-    if (id > 0 && id != 13) {
+    if (id > 0 && id !== 13) {
       axios.get(`/api/Admin/blog/${id}`).then((response) => {
         setTitle(response.data.title);
         setDescription(response.data.shortDescription);
